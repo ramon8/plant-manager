@@ -8,5 +8,5 @@ export interface NavigationProps {
 export interface NavLinkItemProps {
   to: string;
   icon: ComponentType<LucideProps>;
-  label: string;
+  labelKey: string;
 }

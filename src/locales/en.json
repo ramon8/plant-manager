@@ -1,0 +1,73 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "calendar": "Calendar",
+    "add": "Add",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "My Plants",
+    "plantCount": "{{count}} of {{total}} plants",
+    "searchPlaceholder": "Search plants...",
+    "filterPlaceholder": "Filter plants",
+    "filter": {
+      "all": "All Plants",
+      "healthy": "Healthy",
+      "needsAttention": "Needs Attention",
+      "sick": "Sick",
+      "watering": "Needs Watering"
+    },
+    "noWatering": "No watering scheduled",
+    "noPlants": "No plants match your current filters."
+  },
+  "add": {
+    "back": "Back",
+    "title": "Add New Plant",
+    "takePhoto": "Take Photo",
+    "scanPlant": "Scan Plant",
+    "plantSpecies": "Plant Species",
+    "speciesPlaceholder": "Select or search species",
+    "plantNickname": "Plant Nickname",
+    "giveNickname": "Give your plant a name",
+    "potSize": "Pot Size",
+    "selectSize": "Select size",
+    "location": "Location",
+    "selectRoom": "Select room",
+    "careNotes": "Care Notes",
+    "addInstructions": "Add any special care instructions...",
+    "wateringFrequency": "Watering Frequency",
+    "selectFrequency": "Select frequency",
+    "pushNotifications": "Push Notifications",
+    "savePlant": "Save Plant"
+  },
+  "care": {
+    "title": "Care Schedule",
+    "subtitle": "Keep track of your plant care routine",
+    "todaysTasks": "Today's Tasks",
+    "upcomingTasks": "Upcoming Tasks",
+    "emptyToday": "No care tasks scheduled for today. Great job keeping up with your plants!",
+    "emptyUpcoming": "No upcoming care tasks. Add some plants to get started!"
+  },
+  "plantDetail": {
+    "nextWatering": "Next Watering",
+    "frequency": "Frequency",
+    "plantHealth": "Plant Health",
+    "careNotes": "Care Notes",
+    "wateringHistory": "Watering History",
+    "waterNow": "Water Now",
+    "editPlant": "Edit Plant",
+    "notSet": "Not set",
+    "loading": "Loading..."
+  },
+  "task": {
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "calendar": {
+    "months": ["January","February","March","April","May","June","July","August","September","October","November","December"],
+    "daysShort": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+  },
+  "settings": {
+    "title": "Settings"
+  }
+}

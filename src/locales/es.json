@@ -1,0 +1,73 @@
+{
+  "navigation": {
+    "dashboard": "Inicio",
+    "calendar": "Calendario",
+    "add": "Añadir",
+    "settings": "Ajustes"
+  },
+  "dashboard": {
+    "title": "Mis Plantas",
+    "plantCount": "{{count}} de {{total}} plantas",
+    "searchPlaceholder": "Buscar plantas...",
+    "filterPlaceholder": "Filtrar plantas",
+    "filter": {
+      "all": "Todas las plantas",
+      "healthy": "Saludables",
+      "needsAttention": "Con atención",
+      "sick": "Enfermas",
+      "watering": "Necesitan riego"
+    },
+    "noWatering": "Sin riego programado",
+    "noPlants": "Ninguna planta coincide con tus filtros."
+  },
+  "add": {
+    "back": "Volver",
+    "title": "Añadir planta",
+    "takePhoto": "Tomar foto",
+    "scanPlant": "Escanear planta",
+    "plantSpecies": "Especie de la planta",
+    "speciesPlaceholder": "Selecciona o busca especie",
+    "plantNickname": "Apodo de la planta",
+    "giveNickname": "Ponle un nombre a tu planta",
+    "potSize": "Tamaño de maceta",
+    "selectSize": "Selecciona tamaño",
+    "location": "Ubicación",
+    "selectRoom": "Selecciona lugar",
+    "careNotes": "Notas de cuidado",
+    "addInstructions": "Agrega instrucciones especiales...",
+    "wateringFrequency": "Frecuencia de riego",
+    "selectFrequency": "Selecciona frecuencia",
+    "pushNotifications": "Notificaciones push",
+    "savePlant": "Guardar planta"
+  },
+  "care": {
+    "title": "Agenda de cuidados",
+    "subtitle": "Lleva el control del cuidado de tus plantas",
+    "todaysTasks": "Tareas de hoy",
+    "upcomingTasks": "Próximas tareas",
+    "emptyToday": "No hay tareas de cuidado para hoy. ¡Buen trabajo!",
+    "emptyUpcoming": "No hay próximas tareas. ¡Agrega algunas plantas!"
+  },
+  "plantDetail": {
+    "nextWatering": "Próximo riego",
+    "frequency": "Frecuencia",
+    "plantHealth": "Salud de la planta",
+    "careNotes": "Notas de cuidado",
+    "wateringHistory": "Historial de riego",
+    "waterNow": "Regar ahora",
+    "editPlant": "Editar planta",
+    "notSet": "Sin definir",
+    "loading": "Cargando..."
+  },
+  "task": {
+    "today": "Hoy",
+    "tomorrow": "Mañana"
+  },
+  "calendar": {
+    "months": ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
+    "daysShort": ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"]
+  },
+  "settings": {
+    "title": "Ajustes"
+  }
+}

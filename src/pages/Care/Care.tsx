@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Header from '../../components/Header';
 import Calendar from '../../components/Calendar';
 import Task from '../../components/Task';
@@ -45,6 +46,7 @@ const EmptyTasks: React.FC<{ message: string }> = ({ message }) => (
 );
 
 const Care: React.FC<CareProps> = ({ className }) => {
+    const { t } = useTranslation();
     const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
@@ -83,7 +85,7 @@ const Care: React.FC<CareProps> = ({ className }) => {
 
     return (
         <CareContainer className={className}>
-            <Header title="Care Schedule" subtitle="Keep track of your plant care routine" />
+            <Header title={t('care.title')} subtitle={t('care.subtitle')} />
 
             <Calendar 
                 selectedDate={selectedDate}
@@ -92,7 +94,8 @@ const Care: React.FC<CareProps> = ({ className }) => {
             />
 
             <TasksSection>
-                <SectionTitle>Today's Tasks</SectionTitle>                <TasksList>
+                <SectionTitle>{t('care.todaysTasks')}</SectionTitle>
+                <TasksList>
                     {todayTasks.length > 0 ? (
                         todayTasks.map(task => (
                             <Task
@@ -103,13 +106,14 @@ const Care: React.FC<CareProps> = ({ className }) => {
                             />
                         ))
                     ) : (
-                        <EmptyTasks message="No care tasks scheduled for today. Great job keeping up with your plants!" />
+                        <EmptyTasks message={t('care.emptyToday')} />
                     )}
                 </TasksList>
             </TasksSection>
 
             <TasksSection>
-                <SectionTitle>Upcoming Tasks</SectionTitle>                <TasksList>
+                <SectionTitle>{t('care.upcomingTasks')}</SectionTitle>
+                <TasksList>
                     {upcomingTasks.length > 0 ? (
                         upcomingTasks.map(task => (
                             <Task
@@ -120,7 +124,7 @@ const Care: React.FC<CareProps> = ({ className }) => {
                             />
                         ))
                     ) : (
-                        <EmptyTasks message="No upcoming care tasks. Add some plants to get started!" />
+                        <EmptyTasks message={t('care.emptyUpcoming')} />
                     )}
                 </TasksList>
             </TasksSection>

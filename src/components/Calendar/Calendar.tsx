@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
     CalendarContainer,
@@ -18,6 +19,7 @@ const Calendar: React.FC<CalendarProps> = ({
     onDateSelect, 
     tasks = [] 
 }) => {
+    const { t } = useTranslation();
     const [currentDate, setCurrentDate] = useState(selectedDate || new Date());
 
     const generateCalendar = () => {
@@ -31,7 +33,7 @@ const Calendar: React.FC<CalendarProps> = ({
         const today = new Date();
 
         // Add day headers
-        const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dayHeaders = t('calendar.daysShort', { returnObjects: true }) as string[];
         dayHeaders.forEach(day => {
             days.push(
                 <CalendarDayHeader key={`header-${day}`}>
@@ -87,10 +89,7 @@ const Calendar: React.FC<CalendarProps> = ({
         setCurrentDate(newDate);
     };
 
-    const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+    const monthNames = t('calendar.months', { returnObjects: true }) as string[];
 
     return (
         <CalendarContainer className={className}>
