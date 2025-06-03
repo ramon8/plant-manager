@@ -6,9 +6,9 @@ import { AppContainer, MainContent } from './App.styles';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
 import Care from './pages/Care';
-import Settings from './pages/Settings';
 import AddPlant from './pages/Add';
 import PlantDetail from './pages/PlantDetail';
+import Settings from './pages/Settings';
 
 function App() {
   return (
