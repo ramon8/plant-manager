@@ -119,7 +119,9 @@ export const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   font-size: ${({ theme }) => theme.fontSize.base};
-  
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text.primary};
+
   &::placeholder {
     color: ${({ theme }) => theme.colors.text.light};
   }
@@ -158,6 +160,8 @@ export const Textarea = styled.textarea`
   min-height: 100px;
   resize: vertical;
   font-family: inherit;
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text.primary};
   
   &::placeholder {
     color: ${({ theme }) => theme.colors.text.light};
