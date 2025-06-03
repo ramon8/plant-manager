@@ -1,2 +1,2 @@
-export { theme } from './theme';
+export { lightTheme, darkTheme } from './theme';
 export type { Theme } from './theme';
