@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import {
     DashboardContainer,
-    PageHeader,
     PageTitle,
     PlantCount,
     SearchSection,
@@ -23,6 +22,7 @@ import {
 } from './Dashboard.styles';
 import type { DashboardProps } from './Dashboard.types';
 import { plants } from '../../mocks';
+import PageHeader from '../../components/PageHeader';
 
 const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -67,12 +67,14 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
         }
 
         return matchesSearch && matchesFilter;
-    }); return (
+    });
+
+    return (
         <DashboardContainer className={className}>
-            <PageHeader>
-                <PageTitle>My Plants</PageTitle>
-                <PlantCount>{filteredPlants.length} of {plants.length} plants</PlantCount>
-            </PageHeader>
+            <PageHeader
+                title={<PageTitle>My Plants</PageTitle>}
+                rightContent={<PlantCount>{filteredPlants.length} of {plants.length} plants</PlantCount>}
+            />
 
             <SearchSection>
                 <SearchInput>

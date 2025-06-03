@@ -7,39 +7,6 @@ export const AddContainer = styled.div`
   padding-bottom: 100px; // Bottom navigation space
 `;
 
-export const HeaderContainer = styled.div`
-  position: sticky;
-  top: 0;
-  background-color: ${theme.colors.background};
-  z-index: 100;
-  padding: ${theme.spacing.md} 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid ${theme.colors.border};
-  margin-bottom: ${theme.spacing.md};
-`;
-
-export const BackButton = styled.button`
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  padding: ${theme.spacing.sm};
-  margin-left: -${theme.spacing.sm};
-  color: ${theme.colors.text.primary};
-  cursor: pointer;
-  font-weight: ${theme.fontWeight.medium};
-  
-  svg {
-    margin-right: ${theme.spacing.xs};
-  }
-`;
-
-export const PageTitle = styled.h1`
-  font-size: ${theme.fontSize['2xl']};
-  font-weight: ${theme.fontWeight.bold};
-  margin: ${theme.spacing.md} 0;
-  color: ${theme.colors.text.primary};
-`;
 
 export const FormSection = styled.div`
   background: ${theme.colors.background};
