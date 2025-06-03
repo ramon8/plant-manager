@@ -102,6 +102,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
     const handleTakePhoto = () => {
         // This would be integrated with device camera in a real app
+        // For now, just set a placeholder image
+        setPhotoUrl('https://via.placeholder.com/120');
         console.log('Opening camera...');
     };
 
@@ -144,7 +146,20 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             <form onSubmit={handleSubmit}>
                 <PhotoSection>
                     <PhotoPlaceholder>
-                        <Camera />
+                        {photoUrl ? (
+                            <img
+                                src={photoUrl}
+                                alt="Plant"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        ) : (
+                            <Camera />
+                        )}
                     </PhotoPlaceholder>
 
                     <PhotoActions>
