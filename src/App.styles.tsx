@@ -15,14 +15,14 @@ export const MainContent = styled.main`
   max-width: 100vw;
   overflow-x: hidden;
   
-  /* Add a small top padding on mobile for pages without sticky headers */
-  padding-top: ${theme.spacing.md};
+  /* Space is handled by sticky headers */
+  padding-top: 0;
 
   @media (min-width: ${theme.breakpoints.tablet}) {
     max-width: 600px;
     margin: 0 auto;
     padding: 0 ${theme.spacing.lg} ${theme.spacing.xl};
     padding-bottom: calc(80px + ${theme.spacing.xl});
-    padding-top: ${theme.spacing.md};
+    padding-top: 0;
   }
 `;

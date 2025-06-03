@@ -8,6 +8,8 @@ export const Container = styled.header`
   padding: ${theme.spacing.md} 0;
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   background-color: ${theme.colors.background};
   border-bottom: 1px solid ${theme.colors.border};

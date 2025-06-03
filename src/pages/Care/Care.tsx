@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Header from '../../components/Header';
+import PageHeader from '../../components/PageHeader';
 import Calendar from '../../components/Calendar';
 import Task from '../../components/Task';
 import type { CalendarTask } from '../../components/Calendar';
@@ -83,7 +83,10 @@ const Care: React.FC<CareProps> = ({ className }) => {
 
     return (
         <CareContainer className={className}>
-            <Header title="Care Schedule" subtitle="Keep track of your plant care routine" />
+            <PageHeader
+                title="Care Schedule"
+                subtitle="Keep track of your plant care routine"
+            />
 
             <Calendar 
                 selectedDate={selectedDate}
