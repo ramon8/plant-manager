@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
+import { Camera, ScanText, Droplets } from 'lucide-react';
 import { Select } from 'antd';
 import styled from 'styled-components';
 import {
     AddContainer,
-    HeaderContainer,
-    BackButton,
-    PageTitle,
     FormSection,
     PhotoSection,
     PhotoPlaceholder,
@@ -25,6 +22,7 @@ import {
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
+import PageHeader from '../../components/PageHeader';
 
 // Styled Ant Design Select components
 const StyledSelect = styled(Select)`
@@ -132,16 +130,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
         // Reset form or navigate away
         console.log('Plant added:', newPlant);
-    };    return (
+    };
+
+    return (
         <AddContainer className={className}>
-            <HeaderContainer>
-                <BackButton onClick={handleGoBack}>
-                    <ChevronLeft size={20} />
-                    Back
-                </BackButton>
-                
-                <PageTitle>Add New Plant</PageTitle>
-            </HeaderContainer>
+            <PageHeader title="Add New Plant" onBack={handleGoBack} />
 
             <form onSubmit={handleSubmit}>
                 <PhotoSection>

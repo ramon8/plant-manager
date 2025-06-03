@@ -5,14 +5,6 @@ export const DashboardContainer = styled.div`
   max-width: 100%;
 `;
 
-export const PageHeader = styled.div`
-  border-bottom: 1px solid ${theme.colors.border};
-  margin-bottom: ${theme.spacing.lg};
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: ${theme.colors.background};
-`;
 
 export const PageTitle = styled.h1`
   font-size: ${theme.fontSize['2xl']};

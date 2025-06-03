@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Droplet, Clock, Book, BarChart2, Settings } from 'lucide-react';
+import { Droplet, Clock, Book, BarChart2, Settings } from 'lucide-react';
 import {
     PlantDetailContainer,
-    HeaderContainer,
-    BackButton,
-    PageTitle,
     ProfileCard,
     PlantInfo,
     PlantImage,
@@ -40,6 +37,7 @@ import {
 import type { PlantDetailProps, WateringHistoryItemProps } from './PlantDetail.types';
 import { plants } from '../../mocks/plants';
 import type { Plant } from '../../types';
+import PageHeader from '../../components/PageHeader';
 
 const formatDate = (date: Date): string => {
     return date.toISOString().split('T')[0];
@@ -125,12 +123,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
 
     return (
         <PlantDetailContainer className={className}>
-            <HeaderContainer>
-                <BackButton onClick={handleBack}>
-                    <ArrowLeft size={24} />
-                </BackButton>
-                <PageTitle>{plant.name}</PageTitle>
-            </HeaderContainer>
+            <PageHeader title={plant.name} onBack={handleBack} />
 
             <ProfileCard>
                 <PlantInfo>

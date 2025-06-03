@@ -6,36 +6,6 @@ export const PlantDetailContainer = styled.div`
   padding: 0 16px 80px 16px;
 `;
 
-export const HeaderContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 16px 0;
-  position: sticky;
-  top: 0;
-  background: ${({ theme }) => theme.colors.background};
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  margin-bottom: 8px;
-`;
-
-export const BackButton = styled.button`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.colors.text.primary};
-`;
-
-export const PageTitle = styled.h1`
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-`;
 
 export const ProfileCard = styled.div`
   background: white;
