@@ -19,6 +19,7 @@ import {
 import type { ToggleSettingProps, SelectSettingProps, SettingsProps, UserSettings } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
 
+
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
     label,
     description,
@@ -111,7 +112,6 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                 [key]: value,
             },
         }));
-
         if (key === 'theme' && (value === 'light' || value === 'dark')) {
             setTheme(value);
         }

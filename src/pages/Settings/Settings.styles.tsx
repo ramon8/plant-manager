@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 
+
 export const SettingsContainer = styled.div`
   max-width: 100%;
 `;
@@ -12,6 +13,7 @@ export const SettingsHeader = styled.div`
   padding-top: ${({ theme }) => theme.spacing.md};
   padding-bottom: ${({ theme }) => theme.spacing.md};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   z-index: 100;
 
@@ -25,6 +27,7 @@ export const SettingsHeader = styled.div`
   p {
     color: ${({ theme }) => theme.colors.text.secondary};
     font-size: ${({ theme }) => theme.fontSize.lg};
+
     line-height: 1.5;
   }
 `;
@@ -48,11 +51,13 @@ export const SettingsSection = styled.section`
     font-weight: ${({ theme }) => theme.fontWeight.semibold};
     padding-bottom: ${({ theme }) => theme.spacing.sm};
     border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+
   }
 `;
 
 export const SettingItem = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.lg};
+
 
   &:last-child {
     margin-bottom: 0;
@@ -73,12 +78,14 @@ export const SettingDescription = styled.p`
   font-size: ${({ theme }) => theme.fontSize.sm};
   margin-top: ${({ theme }) => theme.spacing.xs};
   margin-left: ${({ theme }) => theme.spacing.xl};
+
 `;
 
 export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
   width: 18px;
   height: 18px;
   accent-color: ${({ theme }) => theme.colors.primary};
+
   cursor: pointer;
 `;
 
@@ -90,11 +97,13 @@ export const Select = styled.select`
   background-color: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text.primary};
   font-size: ${({ theme }) => theme.fontSize.base};
+
   min-width: 120px;
   cursor: pointer;
 
   &:focus {
     outline: 2px solid ${({ theme }) => theme.colors.primary};
+
     outline-offset: 2px;
   }
 `;
@@ -105,6 +114,7 @@ export const DataActionsContainer = styled.div`
   flex-wrap: wrap;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+
     flex-direction: column;
   }
 `;
@@ -164,6 +174,7 @@ export const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 
 
   &:focus {
     outline: 2px solid ${({ theme }) => theme.colors.primary};
+
     outline-offset: 2px;
   }
 
@@ -180,6 +191,7 @@ export const SettingRow = styled.div`
   gap: ${({ theme }) => theme.spacing.md};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+
     flex-direction: column;
     align-items: flex-start;
   }
