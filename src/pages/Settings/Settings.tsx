@@ -69,7 +69,7 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
 );
 
 const Settings: React.FC<SettingsProps> = ({ className }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [settings, setSettings] = useState<UserSettings>({
         notifications: {
             wateringReminders: true,
@@ -99,6 +99,9 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
     };
 
     const updateDisplaySetting = (key: keyof UserSettings['display'], value: string) => {
+        if (key === 'language') {
+            i18n.changeLanguage(value);
+        }
         setSettings(prev => ({
             ...prev,
             display: {
