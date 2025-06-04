@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Droplets, Circle, CheckCircle2, Scissors, Flower } from 'lucide-react';
 import {
     TaskItem,
@@ -28,6 +29,7 @@ const Task: React.FC<TaskProps> = ({
     onComplete,
     className,
 }) => {
+    const { t, i18n } = useTranslation();
     const handleComplete = () => {
         if (onComplete) {
             onComplete(id);
@@ -40,11 +42,11 @@ const Task: React.FC<TaskProps> = ({
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         if (date.toDateString() === today.toDateString()) {
-            return 'Today';
+            return t('Today');
         } else if (date.toDateString() === tomorrow.toDateString()) {
-            return 'Tomorrow';
+            return t('Tomorrow');
         } else {
-            return date.toLocaleDateString('en-US', {
+            return date.toLocaleDateString(i18n.language, {
                 month: 'short',
                 day: 'numeric',
             });

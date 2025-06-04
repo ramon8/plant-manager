@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Home, Calendar, Plus, Settings } from 'lucide-react';
 import {
     NavigationWrapper,
@@ -8,16 +9,17 @@ import {
     IconContainer,
     LabelText,
 } from './Navigation.styles';
-import type { NavLinkItemProps, NavigationProps } from './Navigation.types';
+import type { NavigationProps } from './Navigation.types';
 
-const navItems: NavLinkItemProps[] = [
-    { to: '/', icon: Home, label: 'Dashboard' },
-    { to: '/care', icon: Calendar, label: 'Calendar' },
-    { to: '/add', icon: Plus, label: 'Add' },
-    { to: '/settings', icon: Settings, label: 'Settings' },
-];
+const navItems = [
+    { to: '/', icon: Home, labelKey: 'Dashboard' },
+    { to: '/care', icon: Calendar, labelKey: 'Calendar' },
+    { to: '/add', icon: Plus, labelKey: 'Add' },
+    { to: '/settings', icon: Settings, labelKey: 'Settings' },
+] as const;
 
 const Navigation: React.FC<NavigationProps> = ({ className }) => {
+    const { t } = useTranslation();
     return (
         <NavigationWrapper className={className}>
             <NavigationContainer>
@@ -33,7 +35,7 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
                                 <IconContainer>
                                     <IconComponent size={24} />
                                 </IconContainer>
-                                <LabelText>{item.label}</LabelText>
+                                <LabelText>{t(item.labelKey)}</LabelText>
                             </StyledNavLink>
                         </NavLinkItem>
                     );

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     SettingsContainer,
     SettingsHeader,
@@ -69,6 +70,7 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
 );
 
 const Settings: React.FC<SettingsProps> = ({ className }) => {
+    const { t, i18n } = useTranslation();
     const { themeName, setTheme } = useTheme();
     const [settings, setSettings] = useState<UserSettings>({
         notifications: {
@@ -78,7 +80,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
         },
         display: {
             theme: themeName,
-            language: 'en',
+            language: i18n.language,
             dateFormat: 'MM/DD/YYYY',
         },
         care: {
@@ -99,6 +101,9 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
     };
 
     const updateDisplaySetting = (key: keyof UserSettings['display'], value: string) => {
+        if (key === 'language') {
+            i18n.changeLanguage(value);
+        }
         setSettings(prev => ({
             ...prev,
             display: {
@@ -142,61 +147,59 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
     return (
         <SettingsContainer className={className}>
             <SettingsHeader>
-                <h1>Settings</h1>
-                <p>Customize your Plant Manager experience and preferences.</p>
+                <h1>{t('SettingsTitle')}</h1>
+                <p>{t('SettingsSubtitle')}</p>
             </SettingsHeader>
 
             <SettingsSections>
                 <SettingsSection>
-                    <h3>🔔 Notifications</h3>
+                    <h3>🔔 {t('Notifications')}</h3>
                     <ToggleSetting
-                        label="Enable watering reminders"
-                        description="Get notified when your plants need watering"
+                        label={t('EnableWateringReminders')}
+                        description={t('GetNotifiedWatering')}
                         checked={settings.notifications.wateringReminders}
                         onChange={(value) => updateNotificationSetting('wateringReminders', value)}
                     />
                     <ToggleSetting
-                        label="Enable care notifications"
-                        description="Receive alerts for fertilizing, repotting, and other care tasks"
+                        label={t('EnableCareNotifications')}
+                        description={t('ReceiveAlerts')}
                         checked={settings.notifications.careNotifications}
                         onChange={(value) => updateNotificationSetting('careNotifications', value)}
                     />
                     <ToggleSetting
-                        label="Email notifications"
-                        description="Receive care reminders via email"
+                        label={t('EmailNotifications')}
+                        description={t('ReceiveEmail')}
                         checked={settings.notifications.emailNotifications}
                         onChange={(value) => updateNotificationSetting('emailNotifications', value)}
                     />
                 </SettingsSection>
 
                 <SettingsSection>
-                    <h3>🎨 Display & Preferences</h3>
+                    <h3>🎨 {t('DisplayPrefs')}</h3>
                     <SelectSetting
-                        label="Theme"
-                        description="Choose your preferred color scheme"
+                        label={t('Theme')}
+                        description={t('ChooseColorScheme')}
                         value={settings.display.theme}
                         options={[
-                            { value: 'light', label: 'Light' },
-                            { value: 'dark', label: 'Dark' },
-                            { value: 'auto', label: 'Auto (System)' },
+                            { value: 'light', label: t('Light') },
+                            { value: 'dark', label: t('Dark') },
+                            { value: 'auto', label: t('Auto') },
                         ]}
                         onChange={(value) => updateDisplaySetting('theme', value)}
                     />
                     <SelectSetting
-                        label="Language"
-                        description="Select your preferred language"
+                        label={t('Language')}
+                        description={t('SelectLanguage')}
                         value={settings.display.language}
                         options={[
-                            { value: 'en', label: 'English' },
-                            { value: 'es', label: 'Español' },
-                            { value: 'fr', label: 'Français' },
-                            { value: 'de', label: 'Deutsch' },
+                            { value: 'en', label: t('English') },
+                            { value: 'es', label: t('Spanish') },
                         ]}
                         onChange={(value) => updateDisplaySetting('language', value)}
                     />
                     <SelectSetting
-                        label="Date Format"
-                        description="Choose how dates are displayed"
+                        label={t('DateFormat')}
+                        description={t('ChooseDateDisplay')}
                         value={settings.display.dateFormat}
                         options={[
                             { value: 'MM/DD/YYYY', label: 'MM/DD/YYYY' },
@@ -208,23 +211,23 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                 </SettingsSection>
 
                 <SettingsSection>
-                    <h3>🌱 Care Settings</h3>
+                    <h3>🌱 {t('CareSettings')}</h3>
                     <SelectSetting
-                        label="Default watering frequency"
-                        description="Default days between watering for new plants"
+                        label={t('DefaultWateringFrequency')}
+                        description={t('DefaultDaysBetween')}
                         value={settings.care.defaultWateringFrequency.toString()}
                         options={[
-                            { value: '1', label: 'Daily' },
+                            { value: '1', label: t('Daily') },
                             { value: '3', label: 'Every 3 days' },
-                            { value: '7', label: 'Weekly' },
+                            { value: '7', label: t('Weekly') },
                             { value: '14', label: 'Bi-weekly' },
-                            { value: '30', label: 'Monthly' },
+                            { value: '30', label: t('Monthly') },
                         ]}
                         onChange={(value) => updateCareSetting('defaultWateringFrequency', parseInt(value))}
                     />
                     <SelectSetting
-                        label="Reminder time"
-                        description="What time should we send you care reminders?"
+                        label={t('ReminderTime')}
+                        description={t('WhatTimeReminders')}
                         value={settings.care.reminderTime}
                         options={[
                             { value: '07:00', label: '7:00 AM' },
@@ -236,32 +239,32 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                         onChange={(value) => updateCareSetting('reminderTime', value)}
                     />
                     <SelectSetting
-                        label="Week starts on"
-                        description="First day of the week in calendar views"
+                        label={t('WeekStartsOn')}
+                        description={t('FirstDayOfWeek')}
                         value={settings.care.weekStartsOn}
                         options={[
-                            { value: 'sunday', label: 'Sunday' },
-                            { value: 'monday', label: 'Monday' },
+                            { value: 'sunday', label: t('Sunday') },
+                            { value: 'monday', label: t('Monday') },
                         ]}
                         onChange={(value) => updateCareSetting('weekStartsOn', value)}
                     />
                 </SettingsSection>
 
                 <SettingsSection>
-                    <h3>💾 Data Management</h3>
+                    <h3>💾 {t('DataManagement')}</h3>
                     <SettingItem>
                         <p style={{ marginBottom: '1rem', color: '#666' }}>
-                            Export your plant data for backup or import data from another device.
+                            {t('ExportDescription')}
                         </p>
                         <DataActionsContainer>
                             <ActionButton variant="primary" onClick={handleExportData}>
-                                📤 Export Plant Data
+                                📤 {t('ExportPlantData')}
                             </ActionButton>
                             <ActionButton variant="secondary" onClick={handleImportData}>
-                                📥 Import Plant Data
+                                📥 {t('ImportPlantData')}
                             </ActionButton>
                             <ActionButton variant="danger" onClick={handleResetData}>
-                                🗑️ Reset All Data
+                                🗑️ {t('ResetAllData')}
                             </ActionButton>
                         </DataActionsContainer>
                     </SettingItem>
