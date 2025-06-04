@@ -35,11 +35,13 @@ const StyledSelect = styled(Select)`
         height: 48px !important;
         border-radius: ${({ theme }) => theme.borderRadius.md} !important;
         border-color: ${({ theme }) => theme.colors.border} !important;
-        background: ${({ theme }) => theme.colors.background} !important;
-        
+        background: ${({ theme }) => theme.colors.surface} !important;
+        color: ${({ theme }) => theme.colors.text.primary} !important;
+
         .ant-select-selection-item {
             line-height: 46px !important;
             font-size: ${({ theme }) => theme.fontSize.base};
+            color: ${({ theme }) => theme.colors.text.primary};
         }
         
         .ant-select-selection-placeholder {

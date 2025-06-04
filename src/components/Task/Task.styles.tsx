@@ -1,19 +1,18 @@
 import styled from 'styled-components';
-import { theme } from '../../theme';
 
 export const TaskItem = styled.div<{ completed?: boolean }>`
   display: flex;
   align-items: center;
-  gap: ${theme.spacing.md};
-  padding: ${theme.spacing.md};
-  background: ${theme.colors.background};
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.borderRadius.sm};
+  gap: ${({ theme }) => theme.spacing.md};
+  padding: ${({ theme }) => theme.spacing.md};
+  background: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
   opacity: ${props => props.completed ? 0.6 : 1};
-  transition: all ${theme.transitions.fast};
+  transition: all ${({ theme }) => theme.transitions.fast};
 
   &:hover {
-    background: ${theme.colors.surface};
+    background: ${({ theme }) => theme.colors.surface};
   }
 `;
 
@@ -21,24 +20,24 @@ export const TaskCheckbox = styled.button<{ completed?: boolean }>`
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  border: 2px solid ${props => props.completed ? theme.colors.success : theme.colors.border};
-  background: ${props => props.completed ? theme.colors.success : 'transparent'};
+  border: 2px solid ${({ completed, theme }) => completed ? theme.colors.success : theme.colors.border};
+  background: ${({ completed, theme }) => completed ? theme.colors.success : 'transparent'};
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all ${theme.transitions.fast};
+  transition: all ${({ theme }) => theme.transitions.fast};
   flex-shrink: 0;
 
   &:hover {
-    border-color: ${theme.colors.success};
+    border-color: ${({ theme }) => theme.colors.success};
   }
 
   svg {
     width: 14px;
     height: 14px;
-    color: ${theme.colors.background};
-    opacity: ${props => props.completed ? 1 : 0};
+    color: ${({ theme }) => theme.colors.background};
+    opacity: ${({ completed }) => completed ? 1 : 0};
   }
 `;
 
@@ -48,18 +47,18 @@ export const TaskInfo = styled.div`
 `;
 
 export const TaskName = styled.div<{ completed?: boolean }>`
-  font-weight: ${theme.fontWeight.medium};
-  color: ${theme.colors.text.primary};
-  margin-bottom: ${theme.spacing.xs};
-  text-decoration: ${props => props.completed ? 'line-through' : 'none'};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.text.primary};
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  text-decoration: ${({ completed }) => completed ? 'line-through' : 'none'};
 `;
 
 export const TaskDate = styled.div`
-  font-size: ${theme.fontSize.sm};
-  color: ${theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.text.secondary};
   display: flex;
   align-items: center;
-  gap: ${theme.spacing.xs};
+  gap: ${({ theme }) => theme.spacing.xs};
 `;
 
 export const TaskIcon = styled.div<{ taskType: string }>`
@@ -70,8 +69,8 @@ export const TaskIcon = styled.div<{ taskType: string }>`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: ${props => {
-    switch (props.taskType) {
+  background: ${({ taskType, theme }) => {
+    switch (taskType) {
       case 'water': return '#e3f2fd';
       case 'fertilize': return '#f3e5f5';
       case 'repot': return '#fff3e0';
@@ -83,8 +82,8 @@ export const TaskIcon = styled.div<{ taskType: string }>`
   svg {
     width: 16px;
     height: 16px;
-    color: ${props => {
-      switch (props.taskType) {
+    color: ${({ taskType, theme }) => {
+      switch (taskType) {
         case 'water': return '#1976d2';
         case 'fertilize': return '#7b1fa2';
         case 'repot': return '#f57c00';

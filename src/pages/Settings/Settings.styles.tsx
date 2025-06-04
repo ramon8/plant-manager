@@ -1,31 +1,33 @@
-import styled from 'styled-components';
-import { theme } from '../../theme';
+import styled, { css } from 'styled-components';
+
 
 export const SettingsContainer = styled.div`
   max-width: 100%;
 `;
 
 export const SettingsHeader = styled.div`
-  margin-bottom: ${theme.spacing.xl};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
   position: sticky;
   top: 0;
-  background-color: ${theme.colors.background};
-  padding-top: ${theme.spacing.md};
-  padding-bottom: ${theme.spacing.md};
-  border-bottom: 1px solid ${theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.background};
+  padding-top: ${({ theme }) => theme.spacing.md};
+  padding-bottom: ${({ theme }) => theme.spacing.md};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   z-index: 100;
 
   h1 {
-    color: ${theme.colors.primary};
-    margin-bottom: ${theme.spacing.sm};
-    font-size: ${theme.fontSize['4xl']};
-    font-weight: ${theme.fontWeight.bold};
+    color: ${({ theme }) => theme.colors.primary};
+    margin-bottom: ${({ theme }) => theme.spacing.sm};
+    font-size: ${({ theme }) => theme.fontSize['4xl']};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
   }
 
   p {
-    color: ${theme.colors.text.secondary};
-    font-size: ${theme.fontSize.lg};
+    color: ${({ theme }) => theme.colors.text.secondary};
+    font-size: ${({ theme }) => theme.fontSize.lg};
+
     line-height: 1.5;
   }
 `;
@@ -33,27 +35,29 @@ export const SettingsHeader = styled.div`
 export const SettingsSections = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xl};
+  gap: ${({ theme }) => theme.spacing.xl};
 `;
 
 export const SettingsSection = styled.section`
-  background: ${theme.colors.surface};
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.borderRadius.md};
-  padding: ${theme.spacing.lg};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  padding: ${({ theme }) => theme.spacing.lg};
 
   h3 {
-    margin: 0 0 ${theme.spacing.lg} 0;
-    color: ${theme.colors.primary};
-    font-size: ${theme.fontSize.xl};
-    font-weight: ${theme.fontWeight.semibold};
-    padding-bottom: ${theme.spacing.sm};
-    border-bottom: 1px solid ${theme.colors.border};
+    margin: 0 0 ${({ theme }) => theme.spacing.lg} 0;
+    color: ${({ theme }) => theme.colors.primary};
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    font-weight: ${({ theme }) => theme.fontWeight.semibold};
+    padding-bottom: ${({ theme }) => theme.spacing.sm};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+
   }
 `;
 
 export const SettingItem = styled.div`
-  margin-bottom: ${theme.spacing.lg};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+
 
   &:last-child {
     margin-bottom: 0;
@@ -63,100 +67,114 @@ export const SettingItem = styled.div`
 export const SettingLabel = styled.label`
   display: flex;
   align-items: center;
-  gap: ${theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.sm};
   cursor: pointer;
-  font-weight: ${theme.fontWeight.medium};
-  color: ${theme.colors.text.primary};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const SettingDescription = styled.p`
-  color: ${theme.colors.text.secondary};
-  font-size: ${theme.fontSize.sm};
-  margin-top: ${theme.spacing.xs};
-  margin-left: ${theme.spacing.xl};
+  color: ${({ theme }) => theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  margin-top: ${({ theme }) => theme.spacing.xs};
+  margin-left: ${({ theme }) => theme.spacing.xl};
+
 `;
 
 export const Checkbox = styled.input.attrs({ type: 'checkbox' })`
   width: 18px;
   height: 18px;
-  accent-color: ${theme.colors.primary};
+  accent-color: ${({ theme }) => theme.colors.primary};
+
   cursor: pointer;
 `;
 
 export const Select = styled.select`
-  margin-left: ${theme.spacing.sm};
-  padding: ${theme.spacing.sm};
-  border: 1px solid ${theme.colors.border};
-  border-radius: ${theme.borderRadius.sm};
-  background-color: ${theme.colors.background};
-  color: ${theme.colors.text.primary};
-  font-size: ${theme.fontSize.base};
+  margin-left: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text.primary};
+  font-size: ${({ theme }) => theme.fontSize.base};
+
   min-width: 120px;
   cursor: pointer;
 
   &:focus {
-    outline: 2px solid ${theme.colors.primary};
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+
     outline-offset: 2px;
   }
 `;
 
 export const DataActionsContainer = styled.div`
   display: flex;
-  gap: ${theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.md};
   flex-wrap: wrap;
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+
     flex-direction: column;
   }
 `;
 
 export const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger' }>`
-  padding: ${theme.spacing.sm} ${theme.spacing.lg};
-  border-radius: ${theme.borderRadius.sm};
-  font-size: ${theme.fontSize.base};
-  font-weight: ${theme.fontWeight.medium};
-  transition: all ${theme.transitions.fast};
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  font-size: ${({ theme }) => theme.fontSize.base};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  transition: all ${({ theme }) => theme.transitions.fast};
   min-width: 160px;
 
-  ${props => props.variant === 'primary' && `
-    background-color: ${theme.colors.primary};
-    color: ${theme.colors.text.white};
+  ${({ variant, theme }) =>
+    variant === 'primary' &&
+    css`
+      background-color: ${theme.colors.primary};
+      color: ${theme.colors.text.white};
 
-    &:hover {
-      background-color: ${theme.colors.primaryHover};
-    }
-  `}
+      &:hover {
+        background-color: ${theme.colors.primaryHover};
+      }
+    `}
 
-  ${props => props.variant === 'secondary' && `
-    background-color: ${theme.colors.secondary};
-    color: ${theme.colors.text.white};
+  ${({ variant, theme }) =>
+    variant === 'secondary' &&
+    css`
+      background-color: ${theme.colors.secondary};
+      color: ${theme.colors.text.white};
 
-    &:hover {
-      background-color: ${theme.colors.secondaryHover};
-    }
-  `}
+      &:hover {
+        background-color: ${theme.colors.secondaryHover};
+      }
+    `}
 
-  ${props => props.variant === 'danger' && `
-    background-color: #dc3545;
-    color: ${theme.colors.text.white};
+  ${({ variant, theme }) =>
+    variant === 'danger' &&
+    css`
+      background-color: #dc3545;
+      color: ${theme.colors.text.white};
 
-    &:hover {
-      background-color: #c82333;
-    }
-  `}
+      &:hover {
+        background-color: #c82333;
+      }
+    `}
 
-  ${props => !props.variant && `
-    background-color: ${theme.colors.surface};
-    color: ${theme.colors.text.primary};
-    border: 1px solid ${theme.colors.border};
+  ${({ variant, theme }) =>
+    !variant &&
+    css`
+      background-color: ${theme.colors.surface};
+      color: ${theme.colors.text.primary};
+      border: 1px solid ${theme.colors.border};
 
-    &:hover {
-      background-color: ${theme.colors.border};
-    }
-  `}
+      &:hover {
+        background-color: ${theme.colors.border};
+      }
+    `}
 
   &:focus {
-    outline: 2px solid ${theme.colors.primary};
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+
     outline-offset: 2px;
   }
 
@@ -170,9 +188,10 @@ export const SettingRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: ${theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.md};
 
-  @media (max-width: ${theme.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+
     flex-direction: column;
     align-items: flex-start;
   }

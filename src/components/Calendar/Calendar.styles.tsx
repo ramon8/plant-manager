@@ -1,29 +1,28 @@
 import styled from 'styled-components';
-import { theme } from '../../theme';
 
 export const CalendarContainer = styled.div`
-  margin-bottom: ${theme.spacing.xl};
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
 export const CalendarHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${theme.spacing.md};
+  margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
 export const CalendarNav = styled.button`
   background: none;
   border: none;
-  padding: ${theme.spacing.sm};
-  border-radius: ${theme.borderRadius.sm};
-  color: ${theme.colors.text.secondary};
+  padding: ${({ theme }) => theme.spacing.sm};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  color: ${({ theme }) => theme.colors.text.secondary};
   cursor: pointer;
-  transition: all ${theme.transitions.fast};
+  transition: all ${({ theme }) => theme.transitions.fast};
 
   &:hover {
-    background-color: ${theme.colors.surface};
-    color: ${theme.colors.text.primary};
+    background-color: ${({ theme }) => theme.colors.surface};
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   svg {
@@ -33,9 +32,9 @@ export const CalendarNav = styled.button`
 `;
 
 export const CalendarTitle = styled.h2`
-  font-size: ${theme.fontSize.lg};
-  font-weight: ${theme.fontWeight.semibold};
-  color: ${theme.colors.text.primary};
+  font-size: ${({ theme }) => theme.fontSize.lg};
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  color: ${({ theme }) => theme.colors.text.primary};
   margin: 0;
 `;
 
@@ -43,33 +42,33 @@ export const CalendarGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 1px;
-  background-color: ${theme.colors.border};
-  border-radius: ${theme.borderRadius.sm};
+  background-color: ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
   overflow: hidden;
 `;
 
 export const CalendarDayHeader = styled.div`
-  background-color: ${theme.colors.surface};
-  padding: ${theme.spacing.sm};
+  background-color: ${({ theme }) => theme.colors.surface};
+  padding: ${({ theme }) => theme.spacing.sm};
   text-align: center;
-  font-size: ${theme.fontSize.sm};
-  font-weight: ${theme.fontWeight.medium};
-  color: ${theme.colors.text.secondary};
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
+  color: ${({ theme }) => theme.colors.text.secondary};
   text-transform: uppercase;
 `;
 
-export const CalendarDay = styled.div<{ 
-  isToday?: boolean; 
-  isOtherMonth?: boolean; 
+export const CalendarDay = styled.div<{
+  isToday?: boolean;
+  isOtherMonth?: boolean;
   hasTasks?: boolean;
   isSelected?: boolean;
 }>`
-  background-color: ${props => {
-    if (props.isSelected) return theme.colors.primary;
-    if (props.isToday) return theme.colors.surface;
+  background-color: ${({ isSelected, isToday, theme }) => {
+    if (isSelected) return theme.colors.primary;
+    if (isToday) return theme.colors.surface;
     return theme.colors.background;
   }};
-  padding: ${theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.sm};
   min-height: 40px;
   display: flex;
   flex-direction: column;
@@ -77,38 +76,38 @@ export const CalendarDay = styled.div<{
   justify-content: center;
   position: relative;
   cursor: pointer;
-  transition: all ${theme.transitions.fast};
+  transition: all ${({ theme }) => theme.transitions.fast};
 
-  ${props => props.isOtherMonth && `
+  ${({ isOtherMonth }) => isOtherMonth && `
     opacity: 0.3;
   `}
 
   &:hover {
-    background-color: ${props => {
-      if (props.isSelected) return theme.colors.primaryHover;
-      if (props.isToday) return theme.colors.border;
+    background-color: ${({ isSelected, isToday, theme }) => {
+      if (isSelected) return theme.colors.primaryHover;
+      if (isToday) return theme.colors.border;
       return theme.colors.surface;
     }};
   }
 
-  ${props => props.hasTasks && `
+  ${({ hasTasks, isSelected, isToday, theme }) => hasTasks && `
     &::after {
       content: '';
       position: absolute;
       bottom: 4px;
       width: 6px;
       height: 6px;
-      background-color: ${props.isSelected || props.isToday ? theme.colors.primary : theme.colors.secondary};
+      background-color: ${isSelected || isToday ? theme.colors.primary : theme.colors.secondary};
       border-radius: 50%;
     }
   `}
 `;
 
 export const CalendarDate = styled.span<{ isToday?: boolean; isSelected?: boolean }>`
-  font-size: ${theme.fontSize.sm};
-  font-weight: ${props => props.isToday || props.isSelected ? theme.fontWeight.bold : theme.fontWeight.normal};
-  color: ${props => {
-    if (props.isSelected) return theme.colors.background;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  font-weight: ${({ isToday, isSelected, theme }) => isToday || isSelected ? theme.fontWeight.bold : theme.fontWeight.normal};
+  color: ${({ isSelected, theme }) => {
+    if (isSelected) return theme.colors.background;
     return theme.colors.text.primary;
   }};
 `;

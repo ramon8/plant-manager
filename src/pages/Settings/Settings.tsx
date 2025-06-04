@@ -17,6 +17,8 @@ import {
     SettingControl,
 } from './Settings.styles';
 import type { ToggleSettingProps, SelectSettingProps, SettingsProps, UserSettings } from './Settings.types';
+import { useTheme } from '../../theme/ThemeContext';
+
 
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
     label,
@@ -70,6 +72,7 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
 
 const Settings: React.FC<SettingsProps> = ({ className }) => {
     const { t, i18n } = useTranslation();
+    const { themeName, setTheme } = useTheme();
     const [settings, setSettings] = useState<UserSettings>({
         notifications: {
             wateringReminders: true,
@@ -77,7 +80,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
             emailNotifications: false,
         },
         display: {
-            theme: 'light',
+            theme: themeName,
             language: i18n.language,
             dateFormat: 'MM/DD/YYYY',
         },
@@ -109,6 +112,9 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                 [key]: value,
             },
         }));
+        if (key === 'theme' && (value === 'light' || value === 'dark')) {
+            setTheme(value);
+        }
     };
 
     const updateCareSetting = (key: keyof UserSettings['care'], value: string | number) => {

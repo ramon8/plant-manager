@@ -1,4 +1,4 @@
-export const theme = {
+export const lightTheme = {
   colors: {
     primary: '#2d5a27',
     primaryHover: '#218838',
@@ -61,6 +61,26 @@ export const theme = {
     md: '0 2px 4px rgba(0, 0, 0, 0.1)',
     lg: '0 4px 8px rgba(0, 0, 0, 0.1)',
   },
-} as const;
+};
 
-export type Theme = typeof theme;
+export const darkTheme = {
+  ...lightTheme,
+  colors: {
+    ...lightTheme.colors,
+    background: '#222222',
+    surface: '#333333',
+    border: '#444444',
+    borderDashed: '#555555',
+    text: {
+      primary: '#ffffff',
+      secondary: '#dddddd',
+      light: '#bbbbbb',
+      white: '#ffffff',
+    },
+    overlay: 'rgba(0, 0, 0, 0.2)',
+    overlayDark: 'rgba(0, 0, 0, 0.3)',
+    shadow: 'rgba(0, 0, 0, 0.3)',
+  },
+};
+
+export type Theme = typeof lightTheme;
