@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const ButtonContainer = styled.button`
   position: fixed;
   top: ${({ theme }) => theme.spacing.md};
-  left: ${({ theme }) => theme.spacing.md};
+  right: ${({ theme }) => theme.spacing.md};
   z-index: 1200;
   width: 40px;
   height: 40px;
