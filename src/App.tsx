@@ -5,9 +5,8 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { ThemeProvider } from 'styled-components';
 import { GlobalStyles } from './styles/GlobalStyles';
-import { theme } from './theme';
+import { CustomThemeProvider } from './theme/ThemeContext';
 import { AppContainer, MainContent } from './App.styles';
 import Navigation from './components/Navigation';
 import PageTransition from './components/PageTransition';
@@ -34,7 +33,7 @@ function AnimatedRoutes() {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <CustomThemeProvider>
       <GlobalStyles />
       <Router>
         <AppContainer>
@@ -44,8 +43,8 @@ function App() {
           <Navigation />
         </AppContainer>
       </Router>
-    </ThemeProvider>
+    </CustomThemeProvider>
   );
 }
 
-export default App
+export default App;

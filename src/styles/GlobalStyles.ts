@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-import { theme } from '../theme';
 
 export const GlobalStyles = createGlobalStyle`
   /* Global Reset and Base Styles */
@@ -15,8 +14,8 @@ export const GlobalStyles = createGlobalStyle`
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: ${theme.colors.background};
-    color: ${theme.colors.text.primary};
+    background-color: ${({ theme }) => theme.colors.background};
+    color: ${({ theme }) => theme.colors.text.primary};
     line-height: 1.6;
   }
 

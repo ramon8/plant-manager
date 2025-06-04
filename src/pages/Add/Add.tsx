@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
 import { Select } from 'antd';
 import styled from 'styled-components';
@@ -34,11 +35,13 @@ const StyledSelect = styled(Select)`
         height: 48px !important;
         border-radius: ${({ theme }) => theme.borderRadius.md} !important;
         border-color: ${({ theme }) => theme.colors.border} !important;
-        background: ${({ theme }) => theme.colors.background} !important;
-        
+        background: ${({ theme }) => theme.colors.surface} !important;
+        color: ${({ theme }) => theme.colors.text.primary} !important;
+
         .ant-select-selection-item {
             line-height: 46px !important;
             font-size: ${({ theme }) => theme.fontSize.base};
+            color: ${({ theme }) => theme.colors.text.primary};
         }
         
         .ant-select-selection-placeholder {
@@ -58,14 +61,6 @@ const StyledSelect = styled(Select)`
 `;
 
 // Mock data for select options
-const wateringFrequencies: WateringFrequency[] = [
-    { value: 'daily', label: 'Daily' },
-    { value: 'twice_weekly', label: 'Twice a week' },
-    { value: 'weekly', label: 'Weekly' },
-    { value: 'biweekly', label: 'Every 2 weeks' },
-    { value: 'monthly', label: 'Monthly' }
-];
-
 const potSizes: PotSize[] = [
     { value: 'small', label: 'Small (4"-6")' },
     { value: 'medium', label: 'Medium (8"-10")' },
@@ -82,6 +77,7 @@ const locations: Location[] = [
 ];
 
 const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
+    const { t } = useTranslation();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -112,6 +108,14 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         console.log('Scanning plant...');
     };
 
+    const wateringFrequencies: WateringFrequency[] = [
+        { value: 'daily', label: t('Daily') },
+        { value: 'twice_weekly', label: t('TwiceWeek') },
+        { value: 'weekly', label: t('Weekly') },
+        { value: 'biweekly', label: t('Every2Weeks') },
+        { value: 'monthly', label: t('Monthly') }
+    ];
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -137,10 +141,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             <HeaderContainer>
                 <BackButton onClick={handleGoBack}>
                     <ChevronLeft size={20} />
-                    Back
+                    {t('Back')}
                 </BackButton>
                 
-                <PageTitle>Add New Plant</PageTitle>
+                <PageTitle>{t('AddNewPlant')}</PageTitle>
             </HeaderContainer>
 
             <form onSubmit={handleSubmit}>
@@ -165,18 +169,18 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     <PhotoActions>
                         <PhotoButton type="button" onClick={handleTakePhoto}>
                             <Camera size={18} />
-                            Take Photo
+                            {t('TakePhoto')}
                         </PhotoButton>
                         <PhotoButton type="button" onClick={handleScanPlant}>
                             <ScanText size={18} />
-                            Scan Plant
+                            {t('ScanPlant')}
                         </PhotoButton>
                     </PhotoActions>
                 </PhotoSection>
 
                 <FormSection>                    <FormGroup>
-                        <Label htmlFor="species">Plant Species</Label>                        <StyledSelect
-                            placeholder="Select or search species"
+                        <Label htmlFor="species">{t("PlantSpecies")}</Label>                        <StyledSelect
+                            placeholder={t("SelectSpecies")}
                             value={plantSpecies}
                             onChange={(value) => setPlantSpecies(value as string)}
                             showSearch
@@ -194,19 +198,19 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     </FormGroup>
 
                     <FormGroup>
-                        <Label htmlFor="nickname">Plant Nickname</Label>
+                        <Label htmlFor="nickname">{t("PlantNickname")}</Label>
                         <Input
                             id="nickname"
                             type="text"
-                            placeholder="Give your plant a name"
+                            placeholder={t("GivePlantName")}
                             value={nickname}
                             onChange={(e) => setNickname(e.target.value)}
                         />
                     </FormGroup>
 
                     <FormRow>                        <FormGroup>
-                            <Label htmlFor="potSize">Pot Size</Label>                            <StyledSelect
-                                placeholder="Select size"
+                            <Label htmlFor="potSize">{t("PotSize")}</Label>                            <StyledSelect
+                                placeholder={t("SelectSize")}
                                 value={potSize}
                                 onChange={(value) => setPotSize(value as string)}
                                 options={potSizes}
@@ -214,9 +218,9 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label htmlFor="location">Location</Label>
+                            <Label htmlFor="location">{t("Location")}</Label>
                             <StyledSelect
-                                placeholder="Select room"
+                                placeholder={t("SelectRoom")}
                                 value={location}
                                 onChange={(value) => setLocation(value as string)}
                                 options={locations}
@@ -225,10 +229,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     </FormRow>
 
                     <FormGroup>
-                        <Label htmlFor="careNotes">Care Notes</Label>
+                        <Label htmlFor="careNotes">{t("CareNotes")}</Label>
                         <Textarea
                             id="careNotes"
-                            placeholder="Add any special care instructions..."
+                            placeholder={t("AddCareInstructions")}
                             value={careNotes}
                             onChange={(e) => setCareNotes(e.target.value)}
                         />
@@ -239,9 +243,9 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     <WateringScheduleIcon>
                         <Droplets />
                     </WateringScheduleIcon>                    <FormGroup>
-                        <Label htmlFor="wateringFrequency">Watering Frequency</Label>
+                        <Label htmlFor="wateringFrequency">{t("WateringFrequency")}</Label>
                         <StyledSelect
-                            placeholder="Select frequency"
+                            placeholder={t("SelectFrequency")}
                             value={wateringFrequency}
                             onChange={(value) => setWateringFrequency(value as string)}
                             options={wateringFrequencies}
@@ -250,7 +254,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
                     <FormGroup>
                         <ToggleRow>
-                            <Label htmlFor="notifications">Push Notifications</Label>
+                            <Label htmlFor="notifications">{t("PushNotifications")}</Label>
                             <Toggle>
                                 <input
                                     type="checkbox"
@@ -263,7 +267,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     </FormGroup>
                 </FormSection>
 
-                <SaveButton type="submit">Save Plant</SaveButton>
+                <SaveButton type="submit">{t("SavePlant")}</SaveButton>
             </form>
         </AddContainer>
     );
