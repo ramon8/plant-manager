@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const SettingsContainer = styled.div`
   max-width: 100%;
@@ -117,42 +117,50 @@ export const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 
   transition: all ${({ theme }) => theme.transitions.fast};
   min-width: 160px;
 
-  ${props => props.variant === 'primary' && `
-    background-color: ${({ theme }) => theme.colors.primary};
-    color: ${({ theme }) => theme.colors.text.white};
+  ${({ variant, theme }) =>
+    variant === 'primary' &&
+    css`
+      background-color: ${theme.colors.primary};
+      color: ${theme.colors.text.white};
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.primaryHover};
-    }
-  `}
+      &:hover {
+        background-color: ${theme.colors.primaryHover};
+      }
+    `}
 
-  ${props => props.variant === 'secondary' && `
-    background-color: ${({ theme }) => theme.colors.secondary};
-    color: ${({ theme }) => theme.colors.text.white};
+  ${({ variant, theme }) =>
+    variant === 'secondary' &&
+    css`
+      background-color: ${theme.colors.secondary};
+      color: ${theme.colors.text.white};
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.secondaryHover};
-    }
-  `}
+      &:hover {
+        background-color: ${theme.colors.secondaryHover};
+      }
+    `}
 
-  ${props => props.variant === 'danger' && `
-    background-color: #dc3545;
-    color: ${({ theme }) => theme.colors.text.white};
+  ${({ variant, theme }) =>
+    variant === 'danger' &&
+    css`
+      background-color: #dc3545;
+      color: ${theme.colors.text.white};
 
-    &:hover {
-      background-color: #c82333;
-    }
-  `}
+      &:hover {
+        background-color: #c82333;
+      }
+    `}
 
-  ${props => !props.variant && `
-    background-color: ${({ theme }) => theme.colors.surface};
-    color: ${({ theme }) => theme.colors.text.primary};
-    border: 1px solid ${({ theme }) => theme.colors.border};
+  ${({ variant, theme }) =>
+    !variant &&
+    css`
+      background-color: ${theme.colors.surface};
+      color: ${theme.colors.text.primary};
+      border: 1px solid ${theme.colors.border};
 
-    &:hover {
-      background-color: ${({ theme }) => theme.colors.border};
-    }
-  `}
+      &:hover {
+        background-color: ${theme.colors.border};
+      }
+    `}
 
   &:focus {
     outline: 2px solid ${({ theme }) => theme.colors.primary};
