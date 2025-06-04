@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Search, Clock, MapPin, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
@@ -30,12 +31,13 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     const navigate = useNavigate();
 
     // Available filter options
+    const { t } = useTranslation();
     const filterOptions = [
-        { value: 'All', label: 'All Plants' },
-        { value: 'healthy', label: 'Healthy' },
-        { value: 'needsAttention', label: 'Needs Attention' },
-        { value: 'sick', label: 'Sick' },
-        { value: 'watering', label: 'Needs Watering' }
+        { value: 'All', label: t('AllPlants') },
+        { value: 'healthy', label: t('Healthy') },
+        { value: 'needsAttention', label: t('NeedsAttention') },
+        { value: 'sick', label: t('Sick') },
+        { value: 'watering', label: t('NeedsWatering') }
     ];
 
     // Apply both search and filter
@@ -67,11 +69,12 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
         }
 
         return matchesSearch && matchesFilter;
-    }); return (
+    });
+    return (
         <DashboardContainer className={className}>
             <PageHeader>
-                <PageTitle>My Plants</PageTitle>
-                <PlantCount>{filteredPlants.length} of {plants.length} plants</PlantCount>
+                <PageTitle>{t('MyPlants')}</PageTitle>
+                <PlantCount>{filteredPlants.length} of {plants.length} {t('AllPlants').toLowerCase()}</PlantCount>
             </PageHeader>
 
             <SearchSection>
@@ -79,7 +82,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                     <Search className="search-icon" size={20} />
                     <input
                         type="text"
-                        placeholder="Search plants..."
+                        placeholder={t('SearchPlants')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -95,7 +98,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                         value={selectedFilter}
                         onChange={setSelectedFilter}
                         options={filterOptions}
-                        placeholder="Filter plants"
+                        placeholder={t('FilterPlants')}
                     />
                 </FilterContainer>
             </SearchSection>
@@ -113,7 +116,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                                 <PlantMeta>
                                     <MetaItem>
                                         <Clock size={14} />
-                                        {plant.nextWatering?.toDateString() || 'No watering scheduled'}
+                                        {plant.nextWatering?.toDateString() || t('NoWateringScheduled')}
                                     </MetaItem>
                                     <MetaItem>
                                         <MapPin size={14} />
@@ -125,7 +128,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                         </PlantCard>
                     ))
                 ) : (
-                    <span>No plants match your current filters.</span>
+                    <span>{t('NoPlantsMatch')}</span>
                 )}
             </PlantsGrid>
         </DashboardContainer>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Droplet, Clock, Book, BarChart2, Settings } from 'lucide-react';
 import {
@@ -45,15 +46,15 @@ const formatDate = (date: Date): string => {
     return date.toISOString().split('T')[0];
 };
 
-const getRelativeWateringDay = (lastWatered: Date): string => {
+const getRelativeWateringDay = (lastWatered: Date, t: (key: string) => string): string => {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     if (formatDate(lastWatered) === formatDate(today)) {
-        return 'Today';
+        return t('Today');
     } else if (formatDate(lastWatered) === formatDate(tomorrow)) {
-        return 'Tomorrow';
+        return t('Tomorrow');
     } else {
         return formatDate(lastWatered);
     }
@@ -72,6 +73,7 @@ const WateringHistoryItem: React.FC<WateringHistoryItemProps> = ({ date, descrip
 );
 
 const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
+    const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [plant, setPlant] = useState<Plant | null>(null);
@@ -98,7 +100,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     }, [id]);
 
     if (!plant) {
-        return <div>Loading...</div>;
+        return <div>{t('Loading')}</div>;
     }
 
     const handleBack = () => {
@@ -117,8 +119,8 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
 
     // Determine next watering day (simplified logic for demo)
     const nextWateringDay = plant.lastWatered
-        ? getRelativeWateringDay(new Date(plant.lastWatered.getTime() + 5 * 24 * 60 * 60 * 1000))
-        : 'Not set';
+        ? getRelativeWateringDay(new Date(plant.lastWatered.getTime() + 5 * 24 * 60 * 60 * 1000), t)
+        : t('NotSet');
 
     // Health percentage (mock value for demo)
     const healthPercentage = 92;
@@ -141,7 +143,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                         <PlantName>{plant.name}</PlantName>
                         <ScientificName>{plant.scientificName}</ScientificName>
                         <TagsContainer>
-                            <Tag>Growing</Tag>
+                            <Tag>{t('Growing')}</Tag>
                             <Tag>{plant.location}</Tag>
                         </TagsContainer>
                     </PlantDetails>
@@ -149,7 +151,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
 
                 <HealthSection>
                     <HealthLabel>
-                        <span>Plant Health</span>
+                        <span>{t('PlantHealth')}</span>
                         <span>{healthPercentage}%</span>
                     </HealthLabel>
                     <HealthBar>
@@ -163,14 +165,14 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                     <InfoIconWrapper>
                         <Droplet size={24} />
                     </InfoIconWrapper>
-                    <InfoLabel>Next Watering</InfoLabel>
+                    <InfoLabel>{t('NextWatering')}</InfoLabel>
                     <InfoValue>{nextWateringDay}</InfoValue>
                 </InfoCard>
                 <InfoCard>
                     <InfoIconWrapper>
                         <Clock size={24} />
                     </InfoIconWrapper>
-                    <InfoLabel>Frequency</InfoLabel>
+                    <InfoLabel>{t('Frequency')}</InfoLabel>
                     <InfoValue>Every 5 days</InfoValue>
                 </InfoCard>
             </InfoCardsContainer>
@@ -180,10 +182,10 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                     <SectionIcon>
                         <Book size={20} />
                     </SectionIcon>
-                    <SectionTitle>Care Notes</SectionTitle>
+                    <SectionTitle>{t('CareNotesTitle')}</SectionTitle>
                 </SectionHeader>
                 <CareNotesText>
-                    Produces baby plants. Great for beginners.
+                    {t('CareNotesText')}
                 </CareNotesText>
             </SectionCard>
 
@@ -192,7 +194,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                     <SectionIcon>
                         <BarChart2 size={20} />
                     </SectionIcon>
-                    <SectionTitle>Watering History</SectionTitle>
+                    <SectionTitle>{t('WateringHistory')}</SectionTitle>
                 </SectionHeader>
                 <HistoryList>
                     {wateringHistory.map((item, index) => (
@@ -208,11 +210,11 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
             <ActionButtonsContainer>
                 <WaterNowButton onClick={handleWaterNow}>
                     <Droplet size={20} />
-                    Water Now
+                    {t('WaterNow')}
                 </WaterNowButton>
                 <EditPlantButton onClick={handleEditPlant}>
                     <Settings size={20} />
-                    Edit Plant
+                    {t('EditPlant')}
                 </EditPlantButton>
             </ActionButtonsContainer>
         </PlantDetailContainer>
