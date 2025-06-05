@@ -107,7 +107,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
             </SettingsHeader>
 
             <SettingsSections>
-                <SettingsSection>
+                {/* <SettingsSection>
                     <h3>🔔 {t('Notifications')}</h3>
                     <ToggleSetting
                         label={t('EnableWateringReminders')}
@@ -127,7 +127,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                         checked={settings.notifications.emailNotifications}
                         onChange={(value) => updateNotificationSetting('emailNotifications', value)}
                     />
-                </SettingsSection>
+                </SettingsSection> */}
 
                 <SettingsSection>
                     <h3>🎨 {t('DisplayPrefs')}</h3>
@@ -160,7 +160,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                             updateDisplaySetting('language', value);
                         }}
                     />
-                    <SelectSetting
+                    {/* <SelectSetting
                         label={t('DateFormat')}
                         description={t('ChooseDateDisplay')}
                         value={settings.display.dateFormat}
@@ -170,10 +170,10 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                             { value: 'YYYY-MM-DD', label: 'YYYY-MM-DD' },
                         ]}
                         onChange={(value) => updateDisplaySetting('dateFormat', value)}
-                    />
+                    /> */}
                 </SettingsSection>
 
-                <SettingsSection>
+                {/* <SettingsSection>
                     <h3>🌱 {t('CareSettings')}</h3>
                     <SelectSetting
                         label={t('DefaultWateringFrequency')}
@@ -211,9 +211,9 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                         ]}
                         onChange={(value) => updateCareSetting('weekStartsOn', value)}
                     />
-                </SettingsSection>
+                </SettingsSection> */}
 
-                <SettingsSection>
+                {/* <SettingsSection>
                     <h3>💾 {t('DataManagement')}</h3>
                     <SettingItem>
                         <p style={{ marginBottom: '1rem', color: '#666' }}>
@@ -231,7 +231,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                             </ActionButton>
                         </DataActionsContainer>
                     </SettingItem>
-                </SettingsSection>
+                </SettingsSection> */}
             </SettingsSections>
         </SettingsContainer>
     );
