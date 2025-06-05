@@ -10,6 +10,7 @@ import Care from './pages/Care';
 import AddPlant from './pages/Add';
 import PlantDetail from './pages/PlantDetail';
 import Settings from './pages/Settings';
+import PromptButton from './components/PromptButton';
 
 const pageVariants = {
   initial: { x: '100%', opacity: 0 },
@@ -44,10 +45,11 @@ function AnimatedRoutes() {
 function App() {
   return (
     <CustomThemeProvider>
+      <GlobalStyles />
       <AppDataProvider>
-        <GlobalStyles />
         <Router>
           <AppContainer>
+            <PromptButton />
             <MainContent>
               <AnimatedRoutes />
             </MainContent>
