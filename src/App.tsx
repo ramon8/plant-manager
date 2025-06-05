@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion';
 import { GlobalStyles } from './styles/GlobalStyles';
 import { CustomThemeProvider } from './theme/ThemeContext';
+import { AppDataProvider } from './context';
 import { AppContainer, MainContent } from './App.styles';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
@@ -43,15 +44,17 @@ function AnimatedRoutes() {
 function App() {
   return (
     <CustomThemeProvider>
-      <GlobalStyles />
-      <Router>
-        <AppContainer>
-          <MainContent>
-            <AnimatedRoutes />
-          </MainContent>
-          <Navigation />
-        </AppContainer>
-      </Router>
+      <AppDataProvider>
+        <GlobalStyles />
+        <Router>
+          <AppContainer>
+            <MainContent>
+              <AnimatedRoutes />
+            </MainContent>
+            <Navigation />
+          </AppContainer>
+        </Router>
+      </AppDataProvider>
     </CustomThemeProvider>
   );
 }

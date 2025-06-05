@@ -39,7 +39,7 @@ import {
     EditPlantButton
 } from './PlantDetail.styles';
 import type { PlantDetailProps, WateringHistoryItemProps } from './PlantDetail.types';
-import { plants } from '../../mocks/plants';
+import { useAppData } from '../../context';
 import type { Plant } from '../../types';
 
 const formatDate = (date: Date): string => {
@@ -76,6 +76,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { plants } = useAppData();
     const [plant, setPlant] = useState<Plant | null>(null);
 
     // Simulated watering history
@@ -91,13 +92,11 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     ];
 
     useEffect(() => {
-        // In a real app, fetch the plant from an API
-        // For now, use the mock data
         const foundPlant = plants.find(p => p.id === id);
         if (foundPlant) {
             setPlant(foundPlant);
         }
-    }, [id]);
+    }, [id, plants]);
 
     if (!plant) {
         return <div>{t('Loading')}</div>;

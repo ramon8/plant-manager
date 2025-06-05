@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     SettingsContainer,
@@ -16,8 +16,9 @@ import {
     SettingContent,
     SettingControl,
 } from './Settings.styles';
-import type { ToggleSettingProps, SelectSettingProps, SettingsProps, UserSettings } from './Settings.types';
+import type { ToggleSettingProps, SelectSettingProps, SettingsProps } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
+import { useAppData } from '../../context';
 
 
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
@@ -72,60 +73,14 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
 
 const Settings: React.FC<SettingsProps> = ({ className }) => {
     const { t, i18n } = useTranslation();
-    const { themeName, setTheme } = useTheme();
-    const [settings, setSettings] = useState<UserSettings>({
-        notifications: {
-            wateringReminders: true,
-            careNotifications: true,
-            emailNotifications: false,
-        },
-        display: {
-            theme: themeName,
-            language: i18n.language,
-            dateFormat: 'MM/DD/YYYY',
-        },
-        care: {
-            defaultWateringFrequency: 7,
-            reminderTime: '09:00',
-            weekStartsOn: 'sunday',
-        },
-    });
+    const { setTheme } = useTheme();
+    const {
+        settings,
+        updateNotificationSetting,
+        updateDisplaySetting,
+        updateCareSetting,
+    } = useAppData();
 
-    const updateNotificationSetting = (key: keyof UserSettings['notifications'], value: boolean) => {
-        setSettings(prev => ({
-            ...prev,
-            notifications: {
-                ...prev.notifications,
-                [key]: value,
-            },
-        }));
-    };
-
-    const updateDisplaySetting = (key: keyof UserSettings['display'], value: string) => {
-        if (key === 'language') {
-            i18n.changeLanguage(value);
-        }
-        setSettings(prev => ({
-            ...prev,
-            display: {
-                ...prev.display,
-                [key]: value,
-            },
-        }));
-        if (key === 'theme' && (value === 'light' || value === 'dark')) {
-            setTheme(value);
-        }
-    };
-
-    const updateCareSetting = (key: keyof UserSettings['care'], value: string | number) => {
-        setSettings(prev => ({
-            ...prev,
-            care: {
-                ...prev.care,
-                [key]: value,
-            },
-        }));
-    };
 
     const handleExportData = () => {
         // TODO: Implement data export functionality
@@ -185,7 +140,12 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                             { value: 'dark', label: t('Dark') },
                             { value: 'auto', label: t('Auto') },
                         ]}
-                        onChange={(value) => updateDisplaySetting('theme', value)}
+                        onChange={(value) => {
+                            updateDisplaySetting('theme', value);
+                            if (value === 'light' || value === 'dark') {
+                                setTheme(value);
+                            }
+                        }}
                     />
                     <SelectSetting
                         label={t('Language')}
@@ -195,7 +155,10 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                             { value: 'en', label: t('English') },
                             { value: 'es', label: t('Spanish') },
                         ]}
-                        onChange={(value) => updateDisplaySetting('language', value)}
+                        onChange={(value) => {
+                            i18n.changeLanguage(value);
+                            updateDisplaySetting('language', value);
+                        }}
                     />
                     <SelectSetting
                         label={t('DateFormat')}
