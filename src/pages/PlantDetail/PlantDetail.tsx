@@ -37,8 +37,12 @@ import {
     ActionButtonsContainer,
     WaterNowButton,
     EditPlantButton,
-    DeletePlantButton
+    DeletePlantButton,
+    ConfirmOverlay,
+    ConfirmModal,
+    ConfirmActions
 } from './PlantDetail.styles';
+import { Button } from '../../components/Common';
 import type { PlantDetailProps, WateringHistoryItemProps } from './PlantDetail.types';
 import { useAppData } from '../../context';
 import type { Plant } from '../../types';
@@ -79,6 +83,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     const navigate = useNavigate();
     const { plants, deletePlant } = useAppData();
     const [plant, setPlant] = useState<Plant | null>(null);
+    const [confirmingDelete, setConfirmingDelete] = useState(false);
 
     // Simulated watering history
     const wateringHistory = [
@@ -117,8 +122,16 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     };
 
     const handleDeletePlant = () => {
+        setConfirmingDelete(true);
+    };
+
+    const confirmDelete = () => {
         deletePlant(plant.id);
         navigate('/');
+    };
+
+    const cancelDelete = () => {
+        setConfirmingDelete(false);
     };
 
     // Determine next watering day (simplified logic for demo)
@@ -225,6 +238,19 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                     {t('DeletePlant')}
                 </DeletePlantButton>
             </ActionButtonsContainer>
+            {confirmingDelete && (
+                <ConfirmOverlay>
+                    <ConfirmModal>
+                        <p>{t('ConfirmDeleteMessage')}</p>
+                        <ConfirmActions>
+                            <Button onClick={cancelDelete}>{t('Cancel')}</Button>
+                            <Button variant="danger" onClick={confirmDelete}>
+                                {t('DeletePlant')}
+                            </Button>
+                        </ConfirmActions>
+                    </ConfirmModal>
+                </ConfirmOverlay>
+            )}
         </PlantDetailContainer>
     );
 };

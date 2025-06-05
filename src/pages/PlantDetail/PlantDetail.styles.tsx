@@ -206,7 +206,7 @@ export const HistoryActionIcon = styled.button`
 
 export const ActionButtonsContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
 `;
@@ -230,4 +230,36 @@ export const DeletePlantButton = styled(Button).attrs({ variant: 'danger' })`
   padding: 12px;
   font-weight: 600;
   gap: 8px;
+  grid-column: 1 / -1;
+`;
+
+export const ConfirmOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+`;
+
+export const ConfirmModal = styled.div`
+  background: ${({ theme }) => theme.colors.background};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  padding: ${({ theme }) => theme.spacing.lg};
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+`;
+
+export const ConfirmActions = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: ${({ theme }) => theme.spacing.lg};
 `;
