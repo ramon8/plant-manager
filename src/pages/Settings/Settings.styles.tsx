@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { Button } from '../../components/Common';
 
 
 export const SettingsContainer = styled.div`
@@ -119,69 +120,9 @@ export const DataActionsContainer = styled.div`
   }
 `;
 
-export const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' | 'danger' }>`
+export const ActionButton = styled(Button)<{ variant?: 'primary' | 'secondary' | 'danger' }>`
   padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  font-size: ${({ theme }) => theme.fontSize.base};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  transition: all ${({ theme }) => theme.transitions.fast};
   min-width: 160px;
-
-  ${({ variant, theme }) =>
-    variant === 'primary' &&
-    css`
-      background-color: ${theme.colors.primary};
-      color: ${theme.colors.text.white};
-
-      &:hover {
-        background-color: ${theme.colors.primaryHover};
-      }
-    `}
-
-  ${({ variant, theme }) =>
-    variant === 'secondary' &&
-    css`
-      background-color: ${theme.colors.secondary};
-      color: ${theme.colors.text.white};
-
-      &:hover {
-        background-color: ${theme.colors.secondaryHover};
-      }
-    `}
-
-  ${({ variant, theme }) =>
-    variant === 'danger' &&
-    css`
-      background-color: #dc3545;
-      color: ${theme.colors.text.white};
-
-      &:hover {
-        background-color: #c82333;
-      }
-    `}
-
-  ${({ variant, theme }) =>
-    !variant &&
-    css`
-      background-color: ${theme.colors.surface};
-      color: ${theme.colors.text.primary};
-      border: 1px solid ${theme.colors.border};
-
-      &:hover {
-        background-color: ${theme.colors.border};
-      }
-    `}
-
-  &:focus {
-    outline: 2px solid ${({ theme }) => theme.colors.primary};
-
-    outline-offset: 2px;
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
 `;
 
 export const SettingRow = styled.div`

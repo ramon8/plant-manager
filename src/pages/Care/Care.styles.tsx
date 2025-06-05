@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { SectionTitle as BaseSectionTitle } from '../../components/Common';
 
 export const CareContainer = styled.div`
   max-width: 100%;
@@ -10,10 +11,7 @@ export const TasksSection = styled.section`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-export const SectionTitle = styled.h3`
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  font-weight: ${({ theme }) => theme.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.text.primary};
+export const SectionTitle = styled(BaseSectionTitle)`
   margin: 0 0 ${({ theme }) => theme.spacing.md} 0;
 `;
 
