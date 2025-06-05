@@ -112,8 +112,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     };
 
     const handleEditPlant = () => {
-        console.log('Edit plant clicked for plant:', plant.id);
-        // Navigate to edit plant page
+        navigate(`/plants/${plant.id}/edit`);
     };
 
     // Determine next watering day (simplified logic for demo)
