@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { MessageSquare, X } from 'lucide-react';
 import {
     ButtonContainer,
@@ -16,6 +16,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     const [text, setText] = useState('');
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selected = e.target.files?.[0] || null;
@@ -32,6 +33,9 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
         }
         setFile(null);
         setPreviewUrl(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -75,6 +79,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
                                 type="file"
                                 accept="image/*"
                                 onChange={handleFileChange}
+                                ref={fileInputRef}
                             />
                             <button type="submit">Send</button>
                         </form>
