@@ -8,6 +8,7 @@ interface AppDataContextValue {
   plants: Plant[];
   addPlant: (plant: Plant) => void;
   updatePlant: (id: string, updated: Partial<Plant>) => void;
+  deletePlant: (id: string) => void;
   settings: UserSettings;
   updateNotificationSetting: (key: keyof UserSettings['notifications'], value: boolean) => void;
   updateDisplaySetting: (key: keyof UserSettings['display'], value: string) => void;
@@ -18,6 +19,7 @@ const AppDataContext = createContext<AppDataContextValue>({
   plants: [],
   addPlant: () => {},
   updatePlant: () => {},
+  deletePlant: () => {},
   settings: {
     notifications: { wateringReminders: true, careNotifications: true, emailNotifications: false },
     display: { theme: 'light', language: 'en', dateFormat: 'MM/DD/YYYY' },
@@ -58,6 +60,10 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
     setPlants(prev => prev.map(p => (p.id === id ? { ...p, ...updated } : p)));
   };
 
+  const deletePlant = (id: string) => {
+    setPlants(prev => prev.filter(p => p.id !== id));
+  };
+
   const updateNotificationSetting = (
     key: keyof UserSettings['notifications'],
     value: boolean,
@@ -94,6 +100,7 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
         plants,
         addPlant,
         updatePlant,
+        deletePlant,
         settings,
         updateNotificationSetting,
         updateDisplaySetting,
