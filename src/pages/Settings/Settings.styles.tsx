@@ -15,7 +15,6 @@ export const SettingsHeader = styled.div`
   padding-bottom: ${({ theme }) => theme.spacing.md};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   z-index: 100;
 
   h1 {

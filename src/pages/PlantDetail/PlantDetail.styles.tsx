@@ -21,7 +21,6 @@ export const HeaderContainer = styled.div`
   top: 0;
   background: ${({ theme }) => theme.colors.background};
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   margin-bottom: 8px;
 `;
