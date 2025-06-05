@@ -5,6 +5,9 @@ import {
     PromptOverlay,
     PromptModal,
     CloseButton,
+    ImagePreviewContainer,
+    ImagePreview,
+    RemoveImageButton,
 } from './PromptButton.styles';
 import type { PromptButtonProps } from './PromptButton.types';
 
@@ -12,6 +15,24 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState('');
     const [file, setFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selected = e.target.files?.[0] || null;
+        setFile(selected);
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+        }
+        setPreviewUrl(selected ? URL.createObjectURL(selected) : null);
+    };
+
+    const removeImage = () => {
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+        }
+        setFile(null);
+        setPreviewUrl(null);
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -19,6 +40,10 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
         setOpen(false);
         setText('');
         setFile(null);
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+        }
+        setPreviewUrl(null);
     };
 
     return (
@@ -33,6 +58,14 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
                             <X size={16} />
                         </CloseButton>
                         <form onSubmit={handleSubmit}>
+                            {previewUrl && (
+                                <ImagePreviewContainer>
+                                    <ImagePreview src={previewUrl} alt="preview" />
+                                    <RemoveImageButton type="button" onClick={removeImage}>
+                                        <X size={12} />
+                                    </RemoveImageButton>
+                                </ImagePreviewContainer>
+                            )}
                             <textarea
                                 placeholder="Type your prompt..."
                                 value={text}
@@ -41,7 +74,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
                             <input
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                                onChange={handleFileChange}
                             />
                             <button type="submit">Send</button>
                         </form>

@@ -89,3 +89,34 @@ export const CloseButton = styled.button`
   right: ${({ theme }) => theme.spacing.sm};
   color: ${({ theme }) => theme.colors.text.primary};
 `;
+
+export const ImagePreviewContainer = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
+`;
+
+export const ImagePreview = styled.img`
+  max-width: 100%;
+  max-height: 120px;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  object-fit: cover;
+`;
+
+export const RemoveImageButton = styled.button`
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #dc3545;
+  color: ${({ theme }) => theme.colors.text.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+`;
