@@ -4,6 +4,10 @@ export interface Plant {
     name: string;
     scientificName: string;
     location: string;
+    potSize?: string;
+    wateringFrequency?: string;
+    careNotes?: string;
+    notificationsEnabled?: boolean;
     lastWatered?: Date;
     nextWatering?: Date;
     lastFertilized?: Date;

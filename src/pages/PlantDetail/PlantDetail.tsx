@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Droplet, Clock, Book, BarChart2, Settings } from 'lucide-react';
+import { ArrowLeft, Droplet, Clock, Book, BarChart2, Settings, Trash2 } from 'lucide-react';
 import {
     PlantDetailContainer,
     HeaderContainer,
@@ -36,7 +36,8 @@ import {
     HistoryActionIcon,
     ActionButtonsContainer,
     WaterNowButton,
-    EditPlantButton
+    EditPlantButton,
+    DeletePlantButton
 } from './PlantDetail.styles';
 import type { PlantDetailProps, WateringHistoryItemProps } from './PlantDetail.types';
 import { useAppData } from '../../context';
@@ -76,7 +77,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const { plants } = useAppData();
+    const { plants, deletePlant } = useAppData();
     const [plant, setPlant] = useState<Plant | null>(null);
 
     // Simulated watering history
@@ -113,6 +114,11 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
 
     const handleEditPlant = () => {
         navigate(`/plants/${plant.id}/edit`);
+    };
+
+    const handleDeletePlant = () => {
+        deletePlant(plant.id);
+        navigate('/');
     };
 
     // Determine next watering day (simplified logic for demo)
@@ -171,7 +177,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                         <Clock size={24} />
                     </InfoIconWrapper>
                     <InfoLabel>{t('Frequency')}</InfoLabel>
-                    <InfoValue>Every 5 days</InfoValue>
+                    <InfoValue>{plant.wateringFrequency || t('NotSet')}</InfoValue>
                 </InfoCard>
             </InfoCardsContainer>
 
@@ -183,7 +189,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                     <SectionTitle>{t('CareNotesTitle')}</SectionTitle>
                 </SectionHeader>
                 <CareNotesText>
-                    {t('CareNotesText')}
+                    {plant.careNotes || t('CareNotesText')}
                 </CareNotesText>
             </SectionCard>
 
@@ -214,6 +220,10 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                     <Settings size={20} />
                     {t('EditPlant')}
                 </EditPlantButton>
+                <DeletePlantButton onClick={handleDeletePlant}>
+                    <Trash2 size={20} />
+                    {t('DeletePlant')}
+                </DeletePlantButton>
             </ActionButtonsContainer>
         </PlantDetailContainer>
     );

@@ -206,7 +206,7 @@ export const HistoryActionIcon = styled.button`
 
 export const ActionButtonsContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
 `;
@@ -219,6 +219,13 @@ export const WaterNowButton = styled(Button).attrs({ variant: 'primary' })`
 `;
 
 export const EditPlantButton = styled(Button)`
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 600;
+  gap: 8px;
+`;
+
+export const DeletePlantButton = styled(Button).attrs({ variant: 'danger' })`
   border-radius: 8px;
   padding: 12px;
   font-weight: 600;
