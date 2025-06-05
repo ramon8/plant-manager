@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
 import { Select } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import {
     AddContainer,
@@ -79,7 +80,9 @@ const locations: Location[] = [
 
 const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const { t } = useTranslation();
-    const { addPlant } = useAppData();
+    const navigate = useNavigate();
+    const { id } = useParams<{ id?: string }>();
+    const { plants, addPlant, updatePlant } = useAppData();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -89,6 +92,23 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [wateringFrequency, setWateringFrequency] = useState('');
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+
+    const editing = Boolean(id);
+
+    useEffect(() => {
+        if (editing) {
+            const plant = plants.find(p => p.id === id);
+            if (plant) {
+                setPlantSpecies(plant.scientificName);
+                setNickname(plant.name);
+                const locOption = locations.find(l => l.label === plant.location);
+                setLocation(locOption ? locOption.value : plant.location);
+                if (plant.image) {
+                    setPhotoUrl(plant.image);
+                }
+            }
+        }
+    }, [editing, id, plants]);
 
     const handleGoBack = () => {
         if (onCancel) {
@@ -121,26 +141,40 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Create new plant object
-        const newPlant: Plant = {
-            id: `plant_${Date.now()}`, // Generate a temporary ID
-            name: nickname,
-            scientificName: plantSpecies,
-            location: locations.find(loc => loc.value === location)?.label || location,
-            acquiredDate: new Date(),
-            image: photoUrl || undefined,
-            status: 'healthy'
-        };
+        if (editing && id) {
+            const updated = {
+                name: nickname,
+                scientificName: plantSpecies,
+                location: locations.find(loc => loc.value === location)?.label || location,
+                image: photoUrl || undefined,
+            };
 
-        if (onSave) {
-            onSave(newPlant);
+            if (onSave) {
+                onSave({ id, ...updated } as Plant);
+            } else {
+                updatePlant(id, updated);
+            }
+            navigate(`/plants/${id}`);
         } else {
-            addPlant(newPlant);
-        }
+            const newPlant: Plant = {
+                id: `plant_${Date.now()}`,
+                name: nickname,
+                scientificName: plantSpecies,
+                location: locations.find(loc => loc.value === location)?.label || location,
+                acquiredDate: new Date(),
+                image: photoUrl || undefined,
+                status: 'healthy',
+            };
 
-        // Reset form or navigate away
-        console.log('Plant added:', newPlant);
-    };    return (
+            if (onSave) {
+                onSave(newPlant);
+            } else {
+                addPlant(newPlant);
+            }
+            navigate(`/plants/${newPlant.id}`);
+        }
+    };
+    return (
         <AddContainer className={className}>
             <HeaderContainer>
                 <BackButton onClick={handleGoBack}>
@@ -148,7 +182,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     {t('Back')}
                 </BackButton>
                 
-                <PageTitle>{t('AddNewPlant')}</PageTitle>
+                <PageTitle>{editing ? t('EditPlant') : t('AddNewPlant')}</PageTitle>
             </HeaderContainer>
 
             <form onSubmit={handleSubmit}>

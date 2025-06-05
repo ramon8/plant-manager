@@ -33,6 +33,7 @@ function AnimatedRoutes() {
         <Routes location={location}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/plants/:id" element={<PlantDetail />} />
+          <Route path="/plants/:id/edit" element={<AddPlant />} />
           <Route path="/add" element={<AddPlant />} />
           <Route path="/care" element={<Care />} />
           <Route path="/settings" element={<Settings />} />
