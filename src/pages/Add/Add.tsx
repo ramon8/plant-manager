@@ -103,6 +103,12 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 setNickname(plant.name);
                 const locOption = locations.find(l => l.label === plant.location);
                 setLocation(locOption ? locOption.value : plant.location);
+                setPotSize(plant.potSize || '');
+                setCareNotes(plant.careNotes || '');
+                setWateringFrequency(plant.wateringFrequency || '');
+                setEnableNotifications(
+                    plant.notificationsEnabled !== undefined ? plant.notificationsEnabled : true
+                );
                 if (plant.image) {
                     setPhotoUrl(plant.image);
                 }
@@ -146,6 +152,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 name: nickname,
                 scientificName: plantSpecies,
                 location: locations.find(loc => loc.value === location)?.label || location,
+                potSize: potSize || undefined,
+                careNotes: careNotes || undefined,
+                wateringFrequency: wateringFrequency || undefined,
+                notificationsEnabled: enableNotifications,
                 image: photoUrl || undefined,
             };
 
@@ -161,6 +171,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 name: nickname,
                 scientificName: plantSpecies,
                 location: locations.find(loc => loc.value === location)?.label || location,
+                potSize: potSize || undefined,
+                careNotes: careNotes || undefined,
+                wateringFrequency: wateringFrequency || undefined,
+                notificationsEnabled: enableNotifications,
                 acquiredDate: new Date(),
                 image: photoUrl || undefined,
                 status: 'healthy',
