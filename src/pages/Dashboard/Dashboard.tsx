@@ -23,12 +23,13 @@ import {
     FilterContainer,
 } from './Dashboard.styles';
 import type { DashboardProps } from './Dashboard.types';
-import { plants } from '../../mocks';
+import { useAppData } from '../../context';
 
 const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilter, setSelectedFilter] = useState<string>('All');
     const navigate = useNavigate();
+    const { plants } = useAppData();
 
     // Available filter options
     const { t } = useTranslation();
