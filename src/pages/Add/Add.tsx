@@ -26,6 +26,7 @@ import {
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
+import { useAppData } from '../../context';
 
 // Styled Ant Design Select components
 const StyledSelect = styled(Select)`
@@ -78,6 +79,7 @@ const locations: Location[] = [
 
 const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const { t } = useTranslation();
+    const { addPlant } = useAppData();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -132,6 +134,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
         if (onSave) {
             onSave(newPlant);
+        } else {
+            addPlant(newPlant);
         }
 
         // Reset form or navigate away
