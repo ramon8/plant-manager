@@ -92,24 +92,25 @@ export const CloseButton = styled.button`
 
 export const ImagePreviewContainer = styled.div`
   position: relative;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
+  width: 80px;
+  height: 80px;
+  margin: 0 auto ${({ theme }) => theme.spacing.sm};
 `;
 
 export const ImagePreview = styled.img`
-  max-width: 100%;
-  max-height: 120px;
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   border: 1px solid ${({ theme }) => theme.colors.border};
   object-fit: cover;
+  display: block;
 `;
 
 export const RemoveImageButton = styled.button`
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
   width: 20px;
   height: 20px;
   border-radius: 50%;
