@@ -1,4 +1,11 @@
 import styled from 'styled-components';
+import {
+  BackButton as BaseBackButton,
+  PageTitle as BasePageTitle,
+  Input as BaseInput,
+  Textarea as BaseTextarea,
+  Button,
+} from '../../components/Common';
 
 export const AddContainer = styled.div`
   max-width: 100%;
@@ -17,27 +24,13 @@ export const HeaderContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
-export const BackButton = styled.button`
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  padding: ${({ theme }) => theme.spacing.sm};
+export const BackButton = styled(BaseBackButton)`
   margin-left: -${({ theme }) => theme.spacing.sm};
-  color: ${({ theme }) => theme.colors.text.primary};
-  cursor: pointer;
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-  
-  svg {
-    margin-right: ${({ theme }) => theme.spacing.xs};
-  }
 `;
 
-export const PageTitle = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize['2xl']};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
+export const PageTitle = styled(BasePageTitle)`
   margin: ${({ theme }) => theme.spacing.md} 0;
-  color: ${({ theme }) => theme.colors.text.primary};
 `;
 
 export const FormSection = styled.div`
@@ -113,24 +106,7 @@ export const Label = styled.label`
   color: ${({ theme }) => theme.colors.text.primary};
 `;
 
-export const Input = styled.input`
-  width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  font-size: ${({ theme }) => theme.fontSize.base};
-  background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.text.primary};
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.text.light};
-  }
-  
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
-`;
+export const Input = styled(BaseInput)``;
 
 export const Select = styled.button`
   width: 100%;
@@ -151,26 +127,8 @@ export const Select = styled.button`
   }
 `;
 
-export const Textarea = styled.textarea`
-  width: 100%;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  font-size: ${({ theme }) => theme.fontSize.base};
-  min-height: 100px;
-  resize: vertical;
+export const Textarea = styled(BaseTextarea)`
   font-family: inherit;
-  background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.text.primary};
-  
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.text.light};
-  }
-  
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
 `;
 
 export const FormRow = styled.div`
@@ -236,23 +194,7 @@ export const ToggleSlider = styled.span<{ checked?: boolean }>`
   }
 `;
 
-export const SaveButton = styled.button`
+export const SaveButton = styled(Button).attrs({ variant: 'primary' })`
   width: 100%;
-  padding: ${({ theme }) => theme.spacing.md};
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
-  border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.sm};
-  font-weight: ${({ theme }) => theme.fontWeight.semibold};
   margin-top: ${({ theme }) => theme.spacing.xl};
-  cursor: pointer;
-  
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryHover};
-  }
-  
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.border};
-    cursor: not-allowed;
-  }
 `;

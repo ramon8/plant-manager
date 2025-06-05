@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { PageTitle as BasePageTitle } from '../../components/Common';
 
 export const DashboardContainer = styled.div`
   max-width: 100%;
@@ -13,10 +14,7 @@ export const PageHeader = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-export const PageTitle = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize['2xl']};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.text.primary};
+export const PageTitle = styled(BasePageTitle)`
   margin: 0 0 ${({ theme }) => theme.spacing.xs} 0;
 `;
 
