@@ -8,40 +8,41 @@ import {
     SettingItem,
     SettingLabel,
     SettingDescription,
-    Checkbox,
     Select,
-    DataActionsContainer,
-    ActionButton,
     SettingRow,
     SettingContent,
     SettingControl,
 } from './Settings.styles';
-import type { ToggleSettingProps, SelectSettingProps, SettingsProps } from './Settings.types';
+import type { SelectSettingProps, SettingsProps } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppData } from '../../context';
 
 
-const ToggleSetting: React.FC<ToggleSettingProps> = ({
-    label,
-    description,
-    checked,
-    onChange,
-}) => (
-    <SettingItem>
-        <SettingRow>
-            <SettingContent>
-                <SettingLabel>
-                    <Checkbox
-                        checked={checked}
-                        onChange={(e) => onChange(e.target.checked)}
-                    />
-                    {label}
-                </SettingLabel>
-                {description && <SettingDescription>{description}</SettingDescription>}
-            </SettingContent>
-        </SettingRow>
-    </SettingItem>
-);
+/*
+ * ToggleSetting is currently unused. Once notification settings are enabled,
+ * this component can be reintroduced.
+ */
+// const ToggleSetting: React.FC<ToggleSettingProps> = ({
+//     label,
+//     description,
+//     checked,
+//     onChange,
+// }) => (
+//     <SettingItem>
+//         <SettingRow>
+//             <SettingContent>
+//                 <SettingLabel>
+//                     <Checkbox
+//                         checked={checked}
+//                         onChange={(e) => onChange(e.target.checked)}
+//                     />
+//                     {label}
+//                 </SettingLabel>
+//                 {description && <SettingDescription>{description}</SettingDescription>}
+//             </SettingContent>
+//         </SettingRow>
+//     </SettingItem>
+// );
 
 const SelectSetting: React.FC<SelectSettingProps> = ({
     label,
@@ -74,30 +75,27 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
 const Settings: React.FC<SettingsProps> = ({ className }) => {
     const { t, i18n } = useTranslation();
     const { setTheme } = useTheme();
-    const {
-        settings,
-        updateNotificationSetting,
-        updateDisplaySetting,
-        updateCareSetting,
-    } = useAppData();
+    const { settings, updateDisplaySetting } = useAppData();
 
 
-    const handleExportData = () => {
-        // TODO: Implement data export functionality
-        console.log('Export data clicked');
-    };
+    /*
+     * The data management actions are not yet implemented. Once these
+     * features are ready, the callbacks below can be restored and wired
+     * to the appropriate UI elements.
+     */
+    // const handleExportData = () => {
+    //     console.log('Export data clicked');
+    // };
 
-    const handleImportData = () => {
-        // TODO: Implement data import functionality
-        console.log('Import data clicked');
-    };
+    // const handleImportData = () => {
+    //     console.log('Import data clicked');
+    // };
 
-    const handleResetData = () => {
-        // TODO: Implement data reset functionality
-        if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
-            console.log('Reset data confirmed');
-        }
-    };
+    // const handleResetData = () => {
+    //     if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+    //         console.log('Reset data confirmed');
+    //     }
+    // };
 
     return (
         <SettingsContainer className={className}>
