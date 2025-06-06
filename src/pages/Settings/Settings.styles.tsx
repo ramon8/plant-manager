@@ -1,21 +1,15 @@
 import styled from 'styled-components';
-import { Button } from '../../components/Common';
+import { Button, PageHeader } from '../../components/Common';
 
 
 export const SettingsContainer = styled.div`
   max-width: 100%;
 `;
 
-export const SettingsHeader = styled.div`
+export const SettingsHeader = styled(PageHeader)`
   margin-bottom: ${({ theme }) => theme.spacing.xl};
-  position: sticky;
-  top: 0;
-  background-color: ${({ theme }) => theme.colors.background};
   padding-top: ${({ theme }) => theme.spacing.md};
   padding-bottom: ${({ theme }) => theme.spacing.md};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-
-  z-index: 100;
 
   h1 {
     color: ${({ theme }) => theme.colors.primary};

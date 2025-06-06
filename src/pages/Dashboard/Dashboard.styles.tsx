@@ -1,18 +1,11 @@
 import styled from 'styled-components';
-import { PageTitle as BasePageTitle } from '../../components/Common';
+import { PageTitle as BasePageTitle, PageHeader as BasePageHeader } from '../../components/Common';
 
 export const DashboardContainer = styled.div`
   max-width: 100%;
 `;
 
-export const PageHeader = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: ${({ theme }) => theme.colors.background};
-`;
+export const PageHeader = styled(BasePageHeader)``;
 
 export const PageTitle = styled(BasePageTitle)`
   margin: 0 0 ${({ theme }) => theme.spacing.xs} 0;

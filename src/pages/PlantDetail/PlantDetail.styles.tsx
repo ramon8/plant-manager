@@ -5,6 +5,7 @@ import {
   SectionTitle as BaseSectionTitle,
   Button,
   Card,
+  PageHeader,
 } from '../../components/Common';
 
 export const PlantDetailContainer = styled.div`
@@ -13,16 +14,11 @@ export const PlantDetailContainer = styled.div`
   padding: 0 16px 80px 16px;
 `;
 
-export const HeaderContainer = styled.div`
+export const HeaderContainer = styled(PageHeader)`
   display: flex;
   align-items: center;
-  padding: 16px 0;
-  position: sticky;
-  top: 0;
-  background: ${({ theme }) => theme.colors.background};
-  z-index: 100;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  margin-bottom: 8px;
+  padding: ${({ theme }) => theme.spacing.md} 0;
+  margin-bottom: ${({ theme }) => theme.spacing.sm};
 `;
 
 export const BackButton = styled(BaseBackButton)`
