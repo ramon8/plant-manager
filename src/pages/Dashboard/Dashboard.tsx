@@ -118,7 +118,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                     filteredPlants.map((plant) => (
                         <PlantCard key={plant.id} onClick={() => navigate(`/plants/${plant.id}`)}>
                             <PlantAvatar>
-                                {plant.name.charAt(0)}
+                                {plant?.name?.charAt(0)}
                             </PlantAvatar>
                             <PlantInfo>
                                 <PlantName>{plant.name}</PlantName>

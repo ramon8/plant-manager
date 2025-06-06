@@ -23,7 +23,7 @@ export const useFirestore = <T extends DocumentWithId>(collectionPath: string) =
   }, [collectionPath]);
 
   const put = useCallback(async (id: string, value: Partial<T>) => {
-    await updateDoc(doc(db, collectionPath, id), value);
+    await updateDoc(doc(db, collectionPath, id) as any, value as any);
   }, [collectionPath]);
 
   const remove = useCallback(async (id: string) => {

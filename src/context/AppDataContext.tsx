@@ -36,7 +36,7 @@ export const useAppData = () => useContext(AppDataContext);
 export const AppDataProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const collectionPath = `plants/${user?.uid}/plant`;
-  const { data: firestorePlants, get, post, put, remove } = useFirestore<Plant>(collectionPath);
+  const { data: firestorePlants, get, post, put, remove } = useFirestore(collectionPath);
   const [plants, setPlants] = useState<Plant[]>([]);
   const [settings, setSettings] = useState<UserSettings>({
     notifications: {
@@ -63,7 +63,7 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
   }, [user, get]);
 
   useEffect(() => {
-    setPlants(firestorePlants);
+    setPlants(firestorePlants as any);
   }, [firestorePlants]);
 
   const addPlant = async (plant: Plant) => {

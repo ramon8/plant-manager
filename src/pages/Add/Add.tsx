@@ -167,6 +167,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             navigate(`/plants/${id}`);
         } else {
             const newPlant: Plant = {
+                id: '',
                 name: nickname,
                 scientificName: plantSpecies,
                 location: locations.find(loc => loc.value === location)?.label || location,
