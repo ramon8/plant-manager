@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Sprout } from 'lucide-react';
 import { useAuth } from '../../context';
-import { LoginContainer, LoginForm, Input, SubmitButton, ErrorMessage } from './Login.styles';
+import {
+  LoginContainer,
+  LoginForm,
+  Input,
+  SubmitButton,
+  ErrorMessage,
+  Title,
+  IconWrapper,
+} from './Login.styles';
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
@@ -22,6 +31,10 @@ const Login: React.FC = () => {
   return (
     <LoginContainer>
       <LoginForm onSubmit={handleSubmit}>
+        <IconWrapper>
+          <Sprout />
+        </IconWrapper>
+        <Title>{t('AppName')}</Title>
         <Input
           placeholder={t('Username')}
           value={username}

@@ -44,6 +44,7 @@ const resources = {
       Weekly: 'Weekly',
       Every2Weeks: 'Every 2 weeks',
       Monthly: 'Monthly',
+      AppName: 'Plant Manager',
       // Login
       Username: 'Username',
       Password: 'Password',
@@ -168,6 +169,7 @@ const resources = {
       Weekly: 'Semanal',
       Every2Weeks: 'Cada 2 semanas',
       Monthly: 'Mensual',
+      AppName: 'Administrador de Plantas',
       Username: 'Usuario',
       Password: 'Contraseña',
       Login: 'Iniciar sesión',
