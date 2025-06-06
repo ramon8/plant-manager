@@ -18,7 +18,7 @@ import {
 } from './Settings.styles';
 import type { ToggleSettingProps, SelectSettingProps, SettingsProps } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
-import { useAppData } from '../../context';
+import { useAppData, useAuth } from '../../context';
 
 
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
@@ -80,6 +80,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
         updateDisplaySetting,
         updateCareSetting,
     } = useAppData();
+    const { logout } = useAuth();
 
 
     const handleExportData = () => {
@@ -232,6 +233,11 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                         </DataActionsContainer>
                     </SettingItem>
                 </SettingsSection> */}
+                <SettingsSection>
+                    <ActionButton variant="danger" onClick={logout}>
+                        {t('Logout')}
+                    </ActionButton>
+                </SettingsSection>
             </SettingsSections>
         </SettingsContainer>
     );

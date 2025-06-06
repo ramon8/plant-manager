@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion';
 import { GlobalStyles } from './styles/GlobalStyles';
 import { CustomThemeProvider } from './theme/ThemeContext';
-import { AppDataProvider } from './context';
+import { AppDataProvider, AuthProvider, useAuth } from './context';
 import { AppContainer, MainContent } from './App.styles';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
@@ -10,6 +10,7 @@ import Care from './pages/Care';
 import AddPlant from './pages/Add';
 import PlantDetail from './pages/PlantDetail';
 import Settings from './pages/Settings';
+import Login from './pages/Login';
 import PromptButton from './components/PromptButton';
 
 const pageVariants = {
@@ -43,21 +44,34 @@ function AnimatedRoutes() {
   );
 }
 
+function RootApp() {
+  const { user } = useAuth();
+  if (!user) {
+    return <Login />;
+  }
+
+  return (
+    <AppContainer>
+      <PromptButton />
+      <MainContent>
+        <AnimatedRoutes />
+      </MainContent>
+      <Navigation />
+    </AppContainer>
+  );
+}
+
 function App() {
   return (
     <CustomThemeProvider>
       <GlobalStyles />
-      <AppDataProvider>
-        <Router>
-          <AppContainer>
-            <PromptButton />
-            <MainContent>
-              <AnimatedRoutes />
-            </MainContent>
-            <Navigation />
-          </AppContainer>
-        </Router>
-      </AppDataProvider>
+      <AuthProvider>
+        <AppDataProvider>
+          <Router>
+            <RootApp />
+          </Router>
+        </AppDataProvider>
+      </AuthProvider>
     </CustomThemeProvider>
   );
 }
