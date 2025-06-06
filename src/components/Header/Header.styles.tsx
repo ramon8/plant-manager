@@ -9,18 +9,6 @@ export const HeaderContainer = styled.header`
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
-
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background-color: ${({ theme }) => theme.colors.border};
-  }
 
   p {
     color: ${({ theme }) => theme.colors.text.secondary};
