@@ -1,14 +1,15 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Plant } from '../types';
 import type { UserSettings } from '../pages/Settings/Settings.types';
-import { plants as mockPlants } from '../mocks';
+import { useAuth } from './AuthContext';
+import { useFirestore } from '../hooks/useFirestore';
 
 interface AppDataContextValue {
   plants: Plant[];
-  addPlant: (plant: Plant) => void;
-  updatePlant: (id: string, updated: Partial<Plant>) => void;
-  deletePlant: (id: string) => void;
+  addPlant: (plant: Plant) => Promise<string>;
+  updatePlant: (id: string, updated: Partial<Plant>) => Promise<void>;
+  deletePlant: (id: string) => Promise<void>;
   settings: UserSettings;
   updateNotificationSetting: (key: keyof UserSettings['notifications'], value: boolean) => void;
   updateDisplaySetting: (key: keyof UserSettings['display'], value: string) => void;
@@ -17,23 +18,26 @@ interface AppDataContextValue {
 
 const AppDataContext = createContext<AppDataContextValue>({
   plants: [],
-  addPlant: () => {},
-  updatePlant: () => {},
-  deletePlant: () => {},
+  addPlant: async () => '',
+  updatePlant: async () => { },
+  deletePlant: async () => { },
   settings: {
     notifications: { wateringReminders: true, careNotifications: true, emailNotifications: false },
     display: { theme: 'light', language: 'en', dateFormat: 'MM/DD/YYYY' },
     care: { defaultWateringFrequency: 7, reminderTime: '09:00', weekStartsOn: 'sunday' },
   },
-  updateNotificationSetting: () => {},
-  updateDisplaySetting: () => {},
-  updateCareSetting: () => {},
+  updateNotificationSetting: () => { },
+  updateDisplaySetting: () => { },
+  updateCareSetting: () => { },
 });
 
 export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }: { children: ReactNode }) => {
-  const [plants, setPlants] = useState<Plant[]>(mockPlants);
+  const { user } = useAuth();
+  const collectionPath = `plants/${user?.uid}/plant`;
+  const { data: firestorePlants, get, post, put, remove } = useFirestore<Plant>(collectionPath);
+  const [plants, setPlants] = useState<Plant[]>([]);
   const [settings, setSettings] = useState<UserSettings>({
     notifications: {
       wateringReminders: true,
@@ -52,15 +56,29 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
     },
   });
 
-  const addPlant = (plant: Plant) => {
-    setPlants(prev => [...prev, plant]);
+  useEffect(() => {
+    if (user) {
+      get();
+    }
+  }, [user, get]);
+
+  useEffect(() => {
+    setPlants(firestorePlants);
+  }, [firestorePlants]);
+
+  const addPlant = async (plant: Plant) => {
+    const id = await post({ ...plant });
+    setPlants(prev => [...prev, { ...plant, id }]);
+    return id;
   };
 
-  const updatePlant = (id: string, updated: Partial<Plant>) => {
+  const updatePlant = async (id: string, updated: Partial<Plant>) => {
+    await put(id, updated);
     setPlants(prev => prev.map(p => (p.id === id ? { ...p, ...updated } : p)));
   };
 
-  const deletePlant = (id: string) => {
+  const deletePlant = async (id: string) => {
+    await remove(id);
     setPlants(prev => prev.filter(p => p.id !== id));
   };
 

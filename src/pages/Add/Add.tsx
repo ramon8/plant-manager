@@ -144,7 +144,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         { value: 'monthly', label: t('Monthly') }
     ];
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (editing && id) {
@@ -152,40 +152,41 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 name: nickname,
                 scientificName: plantSpecies,
                 location: locations.find(loc => loc.value === location)?.label || location,
-                potSize: potSize || undefined,
-                careNotes: careNotes || undefined,
-                wateringFrequency: wateringFrequency || undefined,
+                potSize: potSize || "",
+                careNotes: careNotes || "",
+                wateringFrequency: wateringFrequency || "",
                 notificationsEnabled: enableNotifications,
-                image: photoUrl || undefined,
+                image: photoUrl || "",
             };
 
             if (onSave) {
                 onSave({ id, ...updated } as Plant);
             } else {
-                updatePlant(id, updated);
+                await updatePlant(id, updated);
             }
             navigate(`/plants/${id}`);
         } else {
             const newPlant: Plant = {
-                id: `plant_${Date.now()}`,
                 name: nickname,
                 scientificName: plantSpecies,
                 location: locations.find(loc => loc.value === location)?.label || location,
-                potSize: potSize || undefined,
-                careNotes: careNotes || undefined,
-                wateringFrequency: wateringFrequency || undefined,
+                potSize: potSize || "",
+                careNotes: careNotes || "",
+                wateringFrequency: wateringFrequency || "",
                 notificationsEnabled: enableNotifications,
                 acquiredDate: new Date(),
-                image: photoUrl || undefined,
+                image: photoUrl || "",
                 status: 'healthy',
             };
 
             if (onSave) {
                 onSave(newPlant);
             } else {
-                addPlant(newPlant);
+                const id = await addPlant(newPlant);
+                navigate(`/plants/${id}`);
+                return;
             }
-            navigate(`/plants/${newPlant.id}`);
+            navigate('/');
         }
     };
     return (
@@ -195,7 +196,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     <ChevronLeft size={20} />
                     {t('Back')}
                 </BackButton>
-                
+
                 <PageTitle>{editing ? t('EditPlant') : t('AddNewPlant')}</PageTitle>
             </HeaderContainer>
 
@@ -231,23 +232,23 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 </PhotoSection>
 
                 <FormSection>                    <FormGroup>
-                        <Label htmlFor="species">{t("PlantSpecies")}</Label>                        <StyledSelect
-                            placeholder={t("SelectSpecies")}
-                            value={plantSpecies}
-                            onChange={(value) => setPlantSpecies(value as string)}
-                            showSearch
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={[
-                                { value: 'pothos', label: 'Pothos (Epipremnum aureum)' },
-                                { value: 'snake_plant', label: 'Snake Plant (Sansevieria trifasciata)' },
-                                { value: 'fiddle_leaf', label: 'Fiddle Leaf Fig (Ficus lyrata)' },
-                                { value: 'monstera', label: 'Monstera Deliciosa' },
-                                { value: 'peace_lily', label: 'Peace Lily (Spathiphyllum)' },
-                            ]}
-                        />
-                    </FormGroup>
+                    <Label htmlFor="species">{t("PlantSpecies")}</Label>                        <StyledSelect
+                        placeholder={t("SelectSpecies")}
+                        value={plantSpecies}
+                        onChange={(value) => setPlantSpecies(value as string)}
+                        showSearch
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={[
+                            { value: 'pothos', label: 'Pothos (Epipremnum aureum)' },
+                            { value: 'snake_plant', label: 'Snake Plant (Sansevieria trifasciata)' },
+                            { value: 'fiddle_leaf', label: 'Fiddle Leaf Fig (Ficus lyrata)' },
+                            { value: 'monstera', label: 'Monstera Deliciosa' },
+                            { value: 'peace_lily', label: 'Peace Lily (Spathiphyllum)' },
+                        ]}
+                    />
+                </FormGroup>
 
                     <FormGroup>
                         <Label htmlFor="nickname">{t("PlantNickname")}</Label>
@@ -261,13 +262,13 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     </FormGroup>
 
                     <FormRow>                        <FormGroup>
-                            <Label htmlFor="potSize">{t("PotSize")}</Label>                            <StyledSelect
-                                placeholder={t("SelectSize")}
-                                value={potSize}
-                                onChange={(value) => setPotSize(value as string)}
-                                options={potSizes}
-                            />
-                        </FormGroup>
+                        <Label htmlFor="potSize">{t("PotSize")}</Label>                            <StyledSelect
+                            placeholder={t("SelectSize")}
+                            value={potSize}
+                            onChange={(value) => setPotSize(value as string)}
+                            options={potSizes}
+                        />
+                    </FormGroup>
 
                         <FormGroup>
                             <Label htmlFor="location">{t("Location")}</Label>

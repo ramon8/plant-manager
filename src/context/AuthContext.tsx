@@ -6,7 +6,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
-  User,
+  type User,
 } from 'firebase/auth';
 
 interface AuthContextValue {
@@ -20,7 +20,7 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   login: async () => false,
   register: async () => false,
-  logout: async () => {},
+  logout: async () => { },
 });
 
 export const useAuth = () => useContext(AuthContext);
