@@ -19,23 +19,23 @@ interface AppDataContextValue {
 const AppDataContext = createContext<AppDataContextValue>({
   plants: [],
   addPlant: async () => '',
-  updatePlant: async () => {},
-  deletePlant: async () => {},
+  updatePlant: async () => { },
+  deletePlant: async () => { },
   settings: {
     notifications: { wateringReminders: true, careNotifications: true, emailNotifications: false },
     display: { theme: 'light', language: 'en', dateFormat: 'MM/DD/YYYY' },
     care: { defaultWateringFrequency: 7, reminderTime: '09:00', weekStartsOn: 'sunday' },
   },
-  updateNotificationSetting: () => {},
-  updateDisplaySetting: () => {},
-  updateCareSetting: () => {},
+  updateNotificationSetting: () => { },
+  updateDisplaySetting: () => { },
+  updateCareSetting: () => { },
 });
 
 export const useAppData = () => useContext(AppDataContext);
 
 export const AppDataProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
-  const collectionPath = `plants/${user?.uid ?? 'anonymous'}`;
+  const collectionPath = `plants/${user?.uid}/plant`;
   const { data: firestorePlants, get, post, put, remove } = useFirestore<Plant>(collectionPath);
   const [plants, setPlants] = useState<Plant[]>([]);
   const [settings, setSettings] = useState<UserSettings>({
@@ -67,7 +67,7 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
   }, [firestorePlants]);
 
   const addPlant = async (plant: Plant) => {
-    const id = await post({ ...plant, id: undefined });
+    const id = await post({ ...plant });
     setPlants(prev => [...prev, { ...plant, id }]);
     return id;
   };

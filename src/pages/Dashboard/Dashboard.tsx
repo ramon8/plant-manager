@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Clock, MapPin, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -24,12 +24,21 @@ import {
 } from './Dashboard.styles';
 import type { DashboardProps } from './Dashboard.types';
 import { useAppData } from '../../context';
+import { useFirestore } from '../../hooks/useFirestore';
 
 const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilter, setSelectedFilter] = useState<string>('All');
     const navigate = useNavigate();
     const { plants } = useAppData();
+    const { get } = useFirestore('plants');
+
+    useEffect(() => {
+        (async () => {
+            console.log(await get())
+        })()
+    }, []);
+
 
     // Available filter options
     const { t } = useTranslation();
