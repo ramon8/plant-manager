@@ -5,6 +5,7 @@ import {
   Input as BaseInput,
   Textarea as BaseTextarea,
   Button,
+  PageHeader,
 } from '../../components/Common';
 
 export const AddContainer = styled.div`
@@ -13,14 +14,8 @@ export const AddContainer = styled.div`
   padding-bottom: 100px; // Bottom navigation space
 `;
 
-export const HeaderContainer = styled.div`
-  position: sticky;
-  top: 0;
-  background-color: ${({ theme }) => theme.colors.background};
-  z-index: 100;
+export const HeaderContainer = styled(PageHeader)`
   padding: ${({ theme }) => theme.spacing.md} 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
   margin-bottom: ${({ theme }) => theme.spacing.md};
 `;
 
