@@ -135,3 +135,5 @@ VITE_FIREBASE_APP_ID=your_app_id
 ```
 
 The `useFirestore` hook in `src/hooks/useFirestore.ts` provides simple `get`, `post` and `put` helpers for interacting with Cloud Firestore collections.
+
+New users can register via the **Create Account** page, accessible from the login screen. Registration uses Firebase Authentication with email and password.

@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { Input as BaseInput, Button as BaseButton, PageTitle as BasePageTitle } from '../../components/Common';
 
-export const LoginContainer = styled.div`
+export const SignupContainer = styled.div`
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -9,7 +10,7 @@ export const LoginContainer = styled.div`
   padding: ${({ theme }) => theme.spacing.lg};
 `;
 
-export const LoginForm = styled.form`
+export const SignupForm = styled.form`
   width: 100%;
   max-width: 320px;
   display: flex;
@@ -20,8 +21,6 @@ export const LoginForm = styled.form`
 export const Input = styled(BaseInput)``;
 
 export const SubmitButton = styled(BaseButton).attrs({ variant: 'primary' })``;
-
-export const CreateAccountButton = styled(BaseButton).attrs({ variant: 'ghost' })``;
 
 export const ErrorMessage = styled.p`
   color: red;
@@ -42,5 +41,16 @@ export const IconWrapper = styled.div`
     width: 48px;
     height: 48px;
     color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+export const SwitchLink = styled(Link)`
+  text-align: center;
+  color: ${({ theme }) => theme.colors.primary};
+  text-decoration: none;
+  margin-top: ${({ theme }) => theme.spacing.sm};
+
+  &:hover {
+    text-decoration: underline;
   }
 `;
