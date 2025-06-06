@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useRef, useLayoutEffect, type PropsWithChildren } from 'react';
 import { GlobalStyles } from './styles/GlobalStyles';
 import { CustomThemeProvider } from './theme/ThemeContext';
 import { AppDataProvider } from './context';
@@ -12,23 +13,88 @@ import PlantDetail from './pages/PlantDetail';
 import Settings from './pages/Settings';
 import PromptButton from './components/PromptButton';
 
-const pageVariants = {
-  initial: { x: '100%', opacity: 0 },
-  animate: { x: 0, opacity: 1 },
-  exit: { x: '-100%', opacity: 0 },
+const navPaths = ['/', '/care', '/add', '/settings'] as const;
+
+type Direction = 'left' | 'right' | 'up' | 'down';
+
+const getDirection = (from: string, to: string): Direction => {
+  const fromIndex = navPaths.indexOf(from as (typeof navPaths)[number]);
+  const toIndex = navPaths.indexOf(to as (typeof navPaths)[number]);
+
+  // If either path is not in navigation, use vertical transition (up for detail views)
+  if (fromIndex === -1 || toIndex === -1) {
+    // Check if going to or from a detail/edit page (vertical navigation)
+    if (to.includes('/plants/') || from.includes('/plants/')) {
+      return 'up'; // Detail pages slide up from bottom
+    }
+    return 'down'; // Other non-nav pages slide down
+  }
+
+  // Moving to higher index (right on nav bar) - slide in from right
+  if (toIndex > fromIndex) {
+    return 'left'; // New page slides in from right, pushes current to left
+  }
+
+  // Moving to lower index (left on nav bar) - slide in from left
+  if (toIndex < fromIndex) {
+    return 'right'; // New page slides in from left, pushes current to right
+  }
+
+  return 'down';
+};
+
+// Define animation variants for all 4 directions
+const animationVariants = {
+  left: {
+    initial: { x: '100%', opacity: 1 },
+    animate: { x: 0, opacity: 1 },
+    exit: { opacity: 0 },
+  },
+  right: {
+    initial: { x: '-100%', opacity: 1 },
+    animate: { x: 0, opacity: 1 },
+    exit: { opacity: 0 },
+  },
+  up: {
+    initial: { y: '100%', opacity: 1 },
+    animate: { y: 0, opacity: 1 },
+    exit: { opacity: 0 },
+  },
+  down: {
+    initial: { y: '-100%', opacity: 1 },
+    animate: { y: 0, opacity: 1 },
+    exit: { opacity: 0 },
+  },
 };
 
 function AnimatedRoutes() {
   const location = useLocation();
+  const prevPath = useRef(location.pathname);
+
+  // Get the direction for the current transition
+  const direction = getDirection(prevPath.current, location.pathname);
+  const variants = animationVariants[direction];
+
+  // Use layout effect to update prevPath after render but before paint
+  useLayoutEffect(() => {
+    prevPath.current = location.pathname;
+  }, [location.pathname]);
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       <motion.div
         key={location.pathname}
-        variants={pageVariants}
+        variants={variants}
         initial="initial"
         animate="animate"
         exit="exit"
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.15, ease: "easeInOut" }}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          top: 0,
+          left: 0,
+        }}
       >
         <Routes location={location}>
           <Route path="/" element={<Dashboard />} />
