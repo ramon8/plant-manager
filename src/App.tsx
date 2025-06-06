@@ -48,22 +48,22 @@ const animationVariants = {
   left: {
     initial: { x: '100%', opacity: 1 },
     animate: { x: 0, opacity: 1 },
-    exit: { x: '-100%', opacity: 1 },
+    exit: { opacity: 0 },
   },
   right: {
     initial: { x: '-100%', opacity: 1 },
     animate: { x: 0, opacity: 1 },
-    exit: { x: '100%', opacity: 1 },
+    exit: { opacity: 0 },
   },
   up: {
     initial: { y: '100%', opacity: 1 },
     animate: { y: 0, opacity: 1 },
-    exit: { y: '-100%', opacity: 1 },
+    exit: { opacity: 0 },
   },
   down: {
     initial: { y: '-100%', opacity: 1 },
     animate: { y: 0, opacity: 1 },
-    exit: { y: '100%', opacity: 1 },
+    exit: { opacity: 0 },
   },
 };
 
@@ -79,36 +79,32 @@ function AnimatedRoutes() {
   useLayoutEffect(() => {
     prevPath.current = location.pathname;
   }, [location.pathname]);
-
-  const MotionRoute = ({ children }: PropsWithChildren) => {
-    return <motion.div
-      key={location.pathname}
-      variants={variants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0,
-      }}
-    >{children}</motion.div>
-
-  }
-
   return (
     <AnimatePresence>
-      <Routes location={location}>
-        <Route path="/" element={<MotionRoute><Dashboard /></MotionRoute>} />
-        <Route path="/plants/:id" element={<MotionRoute><PlantDetail /></MotionRoute>} />
-        <Route path="/plants/:id/edit" element={<MotionRoute><AddPlant /></MotionRoute>} />
-        <Route path="/add" element={<MotionRoute><AddPlant /></MotionRoute>} />
-        <Route path="/care" element={<MotionRoute><Care /></MotionRoute>} />
-        <Route path="/settings" element={<MotionRoute><Settings /></MotionRoute>} />
-      </Routes>
+      <motion.div
+        key={location.pathname}
+        variants={variants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{ duration: 0.15, ease: "easeInOut" }}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          top: 0,
+          left: 0,
+        }}
+      >
+        <Routes location={location}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/plants/:id" element={<PlantDetail />} />
+          <Route path="/plants/:id/edit" element={<AddPlant />} />
+          <Route path="/add" element={<AddPlant />} />
+          <Route path="/care" element={<Care />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </motion.div>
     </AnimatePresence>
   );
 }
