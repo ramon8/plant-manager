@@ -12,6 +12,7 @@ import AddPlant from './pages/Add';
 import PlantDetail from './pages/PlantDetail';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import PromptButton from './components/PromptButton';
 
 const navPaths = ['/', '/care', '/add', '/settings'] as const;
@@ -110,10 +111,19 @@ function AnimatedRoutes() {
   );
 }
 
+function AuthRoutes() {
+  return (
+    <Routes>
+      <Route path="/signup" element={<Signup />} />
+      <Route path="*" element={<Login />} />
+    </Routes>
+  );
+}
+
 function RootApp() {
   const { user } = useAuth();
   if (!user) {
-    return <Login />;
+    return <AuthRoutes />;
   }
 
   return (

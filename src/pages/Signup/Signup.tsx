@@ -1,47 +1,48 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sprout } from 'lucide-react';
-import { useAuth } from '../../context';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context';
 import {
-  LoginContainer,
-  LoginForm,
+  SignupContainer,
+  SignupForm,
   Input,
   SubmitButton,
-  CreateAccountButton,
   ErrorMessage,
   Title,
   IconWrapper,
-} from './Login.styles';
+  SwitchLink,
+} from './Signup.styles';
 
-const Login: React.FC = () => {
+const Signup: React.FC = () => {
   const { t } = useTranslation();
-  const { login } = useAuth();
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+  const { register } = useAuth();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (await login(username, password)) {
+    if (await register(email, password)) {
       setError('');
+      navigate('/');
     } else {
       setError(t('InvalidCredentials'));
     }
   };
 
   return (
-    <LoginContainer>
-      <LoginForm onSubmit={handleSubmit}>
+    <SignupContainer>
+      <SignupForm onSubmit={handleSubmit}>
         <IconWrapper>
           <Sprout />
         </IconWrapper>
-        <Title>{t('AppName')}</Title>
+        <Title>{t('CreateAccount')}</Title>
         <Input
           placeholder={t('Username')}
-          value={username}
-          onChange={e => setUsername(e.target.value)}
+          value={email}
+          onChange={e => setEmail(e.target.value)}
         />
         <Input
           type="password"
@@ -50,16 +51,11 @@ const Login: React.FC = () => {
           onChange={e => setPassword(e.target.value)}
         />
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <SubmitButton type="submit">{t('Login')}</SubmitButton>
-        <CreateAccountButton
-          type="button"
-          onClick={() => navigate('/signup')}
-        >
-          {t('CreateAccount')}
-        </CreateAccountButton>
-      </LoginForm>
-    </LoginContainer>
+        <SubmitButton type="submit">{t('SignUp')}</SubmitButton>
+        <SwitchLink to="/login">{t('HaveAccount')}</SwitchLink>
+      </SignupForm>
+    </SignupContainer>
   );
 };
 
-export default Login;
+export default Signup;
