@@ -144,7 +144,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         { value: 'monthly', label: t('Monthly') }
     ];
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (editing && id) {
@@ -162,12 +162,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             if (onSave) {
                 onSave({ id, ...updated } as Plant);
             } else {
-                updatePlant(id, updated);
+                await updatePlant(id, updated);
             }
             navigate(`/plants/${id}`);
         } else {
             const newPlant: Plant = {
-                id: `plant_${Date.now()}`,
                 name: nickname,
                 scientificName: plantSpecies,
                 location: locations.find(loc => loc.value === location)?.label || location,
@@ -183,9 +182,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             if (onSave) {
                 onSave(newPlant);
             } else {
-                addPlant(newPlant);
+                const id = await addPlant(newPlant);
+                navigate(`/plants/${id}`);
+                return;
             }
-            navigate(`/plants/${newPlant.id}`);
+            navigate('/');
         }
     };
     return (

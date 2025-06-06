@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { addDoc, collection, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 interface DocumentWithId {
@@ -26,5 +26,9 @@ export const useFirestore = <T extends DocumentWithId>(collectionPath: string) =
     await updateDoc(doc(db, collectionPath, id), value);
   }, [collectionPath]);
 
-  return { data, get, post, put };
+  const remove = useCallback(async (id: string) => {
+    await deleteDoc(doc(db, collectionPath, id));
+  }, [collectionPath]);
+
+  return { data, get, post, put, remove };
 };
