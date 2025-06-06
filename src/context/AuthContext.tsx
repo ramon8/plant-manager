@@ -1,48 +1,46 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
+import { auth } from '../firebase';
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+} from 'firebase/auth';
 
 interface AuthContextValue {
-  user: string | null;
-  login: (username: string, password: string) => boolean;
-  logout: () => void;
+  user: User | null;
+  login: (email: string, password: string) => Promise<boolean>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   user: null,
-  login: () => false,
-  logout: () => {},
+  login: async () => false,
+  logout: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
 
-const USER_KEY = 'pm_user';
-const PASS_KEY = 'pm_pass';
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem(USER_KEY);
-    const storedPass = localStorage.getItem(PASS_KEY);
-    if (storedUser === 'admin' && storedPass === 'admin') {
-      setUser('admin');
-    }
+    const unsub = onAuthStateChanged(auth, current => setUser(current));
+    return unsub;
   }, []);
 
-  const login = (username: string, password: string) => {
-    if (username === 'admin' && password === 'admin') {
-      localStorage.setItem(USER_KEY, username);
-      localStorage.setItem(PASS_KEY, password);
-      setUser(username);
+  const login = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       return true;
+    } catch {
+      return false;
     }
-    return false;
   };
 
-  const logout = () => {
-    localStorage.removeItem(USER_KEY);
-    localStorage.removeItem(PASS_KEY);
-    setUser(null);
+  const logout = async () => {
+    await signOut(auth);
   };
 
   return (
