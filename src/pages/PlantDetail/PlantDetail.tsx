@@ -41,7 +41,7 @@ import {
     ConfirmModal,
     ConfirmActions
 } from './PlantDetail.styles';
-import { Button } from '../../components/Common';
+import { Button, Spinner } from '../../components/Common';
 import type { PlantDetailProps, WateringHistoryItemProps } from './PlantDetail.types';
 import { useAppData } from '../../context';
 import type { Plant } from '../../types';
@@ -83,6 +83,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     const { plants, deletePlant } = useAppData();
     const [plant, setPlant] = useState<Plant | null>(null);
     const [confirmingDelete, setConfirmingDelete] = useState(false);
+    const [deleting, setDeleting] = useState(false);
 
     // Simulated watering history
     const wateringHistory = [
@@ -125,7 +126,9 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
     };
 
     const confirmDelete = async () => {
+        setDeleting(true);
         await deletePlant(plant.id);
+        setDeleting(false);
         navigate('/');
     };
 
@@ -241,8 +244,8 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                             <p>{t('ConfirmDeleteMessage')}</p>
                             <ConfirmActions>
                                 <Button onClick={cancelDelete}>{t('Cancel')}</Button>
-                                <Button variant="danger" onClick={confirmDelete}>
-                                    {t('DeletePlant')}
+                                <Button variant="danger" onClick={confirmDelete} disabled={deleting}>
+                                    {deleting ? <Spinner /> : t('DeletePlant')}
                                 </Button>
                             </ConfirmActions>
                         </ConfirmModal>                </ConfirmOverlay>

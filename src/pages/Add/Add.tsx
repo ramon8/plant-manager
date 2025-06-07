@@ -27,6 +27,7 @@ import {
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
 import { useAppData } from '../../context';
+import { Spinner } from '../../components/Common';
 
 // Styled Ant Design Select components
 const StyledSelect = styled(Select)`
@@ -91,6 +92,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [wateringFrequency, setWateringFrequency] = useState('');
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const editing = Boolean(id);
 
@@ -145,6 +147,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
 
         if (editing && id) {
             const updated = {
@@ -163,6 +166,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             } else {
                 await updatePlant(id, updated);
             }
+            setLoading(false);
             navigate(`/plants/${id}`);
         } else {
             const newPlant: Plant = {
@@ -181,12 +185,14 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
             if (onSave) {
                 onSave(newPlant);
+                setLoading(false);
+                navigate('/');
             } else {
                 const id = await addPlant(newPlant);
+                setLoading(false);
                 navigate(`/plants/${id}`);
                 return;
             }
-            navigate('/');
         }
     }; return (
         <PageLayout
@@ -319,7 +325,9 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                             </ToggleRow>
                         </FormGroup>
                     </FormSection>
-                    <SaveButton type="submit">{t("SavePlant")}</SaveButton>
+                    <SaveButton type="submit" disabled={loading}>
+                        {loading ? <Spinner /> : t("SavePlant")}
+                    </SaveButton>
                 </form>
             </AddContainer>
         </PageLayout>
