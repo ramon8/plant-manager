@@ -207,6 +207,17 @@ export const ScanOverlay = styled.div`
   z-index: 1200;
 `;
 
+export const ScanContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ScanMessage = styled.p`
+  margin-top: ${({ theme }) => theme.spacing.md};
+  color: ${({ theme }) => theme.colors.text.primary};
+`;
+
 export const SourceOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -214,6 +225,7 @@ export const SourceOverlay = styled.div`
   right: 0;
   bottom: 0;
   background-color: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
