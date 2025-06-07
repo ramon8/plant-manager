@@ -206,3 +206,31 @@ export const ScanOverlay = styled.div`
   justify-content: center;
   z-index: 1200;
 `;
+
+export const SourceOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${({ theme }) => theme.colors.overlay};
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1200;
+`;
+
+export const SourceModal = styled.div`
+  background: ${({ theme }) => theme.colors.background};
+  border-top-left-radius: ${({ theme }) => theme.borderRadius.md};
+  border-top-right-radius: ${({ theme }) => theme.borderRadius.md};
+  width: 100%;
+  max-width: 500px;
+  padding: ${({ theme }) => theme.spacing.lg};
+`;
+
+export const SourceActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
+`;

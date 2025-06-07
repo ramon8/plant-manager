@@ -23,6 +23,9 @@ import {
     ToggleSlider,
     SaveButton,
     ScanOverlay,
+    SourceOverlay,
+    SourceModal,
+    SourceActions,
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
@@ -101,8 +104,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [scanning, setScanning] = useState(false);
+    const [sourcePicker, setSourcePicker] = useState<null | 'photo' | 'scan'>(null);
     const photoInputRef = useRef<HTMLInputElement | null>(null);
     const scanInputRef = useRef<HTMLInputElement | null>(null);
+    const photoGalleryInputRef = useRef<HTMLInputElement | null>(null);
+    const scanGalleryInputRef = useRef<HTMLInputElement | null>(null);
 
     const editing = Boolean(id);
 
@@ -136,7 +142,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     };
 
     const handleTakePhoto = () => {
-        photoInputRef.current?.click();
+        setSourcePicker('photo');
     };
 
     const handlePhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +159,25 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
 
     const handleScanPlant = () => {
-        scanInputRef.current?.click();
+        setSourcePicker('scan');
+    };
+
+    const chooseCamera = () => {
+        if (sourcePicker === 'photo') {
+            photoInputRef.current?.click();
+        } else if (sourcePicker === 'scan') {
+            scanInputRef.current?.click();
+        }
+        setSourcePicker(null);
+    };
+
+    const chooseGallery = () => {
+        if (sourcePicker === 'photo') {
+            photoGalleryInputRef.current?.click();
+        } else if (sourcePicker === 'scan') {
+            scanGalleryInputRef.current?.click();
+        }
+        setSourcePicker(null);
     };
 
     async function identifyPlant(file: File) {
@@ -345,10 +369,24 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 onChange={handlePhotoSelected}
                             />
                             <input
+                                ref={photoGalleryInputRef}
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handlePhotoSelected}
+                            />
+                            <input
                                 ref={scanInputRef}
                                 type="file"
                                 accept="image/*"
                                 capture="environment"
+                                style={{ display: 'none' }}
+                                onChange={handleScanSelected}
+                            />
+                            <input
+                                ref={scanGalleryInputRef}
+                                type="file"
+                                accept="image/*"
                                 style={{ display: 'none' }}
                                 onChange={handleScanSelected}
                             />
@@ -451,6 +489,25 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 <ScanOverlay>
                     <Spinner style={{ width: '48px', height: '48px' }} />
                 </ScanOverlay>
+            )}
+            {sourcePicker && (
+                <SourceOverlay onClick={() => setSourcePicker(null)}>
+                    <SourceModal onClick={(e) => e.stopPropagation()}>
+                        <SourceActions>
+                            <PhotoButton type="button" onClick={chooseCamera}>
+                                <Camera size={18} />
+                                {t('Camera')}
+                            </PhotoButton>
+                            <PhotoButton type="button" onClick={chooseGallery}>
+                                <ScanText size={18} />
+                                {t('Gallery')}
+                            </PhotoButton>
+                            <PhotoButton type="button" onClick={() => setSourcePicker(null)}>
+                                {t('Cancel')}
+                            </PhotoButton>
+                        </SourceActions>
+                    </SourceModal>
+                </SourceOverlay>
             )}
         </PageLayout>
     );
