@@ -10,7 +10,6 @@ import {
 
 export const AddContainer = styled.div`
   max-width: 100%;
-  padding: 0 ${({ theme }) => theme.spacing.md};
   padding-bottom: 100px; // Bottom navigation space
 `;
 

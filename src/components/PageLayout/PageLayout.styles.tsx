@@ -18,6 +18,7 @@ export const LayoutHeader = styled(PageHeader)`
 
 export const BackButton = styled(BaseBackButton)`
   margin-right: ${({ theme }) => theme.spacing.sm};
+  position: absolute
 `;
 
 export const TitleContainer = styled.div`
@@ -40,7 +41,6 @@ export const Subtitle = styled.p`
 
 export const Main = styled.main`
   flex: 1;
-  padding: 0 ${({ theme }) => theme.spacing.md};
 `;
 
 export const FooterContainer = styled.div`
