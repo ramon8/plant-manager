@@ -192,3 +192,17 @@ export const SaveButton = styled(Button).attrs({ variant: 'primary' })`
   width: 100%;
   margin-top: ${({ theme }) => theme.spacing.xl};
 `;
+
+export const ScanOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+`;
