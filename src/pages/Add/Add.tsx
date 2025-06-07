@@ -22,6 +22,7 @@ import {
     Toggle,
     ToggleSlider,
     SaveButton,
+    ErrorMessage,
     ScanOverlay,
     SourceOverlay,
     SourceModal,
@@ -103,6 +104,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [scanning, setScanning] = useState(false);
     const [sourcePicker, setSourcePicker] = useState<null | 'photo' | 'scan'>(null);
     const photoInputRef = useRef<HTMLInputElement | null>(null);
@@ -277,52 +279,54 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
+        try {
+            if (editing && id) {
+                const updated = {
+                    name: nickname,
+                    scientificName: plantSpecies,
+                    location: locations.find(loc => loc.value === location)?.label || location,
+                    potSize: potSize || "",
+                    careNotes: careNotes || "",
+                    wateringFrequency: wateringFrequency || "",
+                    notificationsEnabled: enableNotifications,
+                    image: photoUrl || "",
+                };
 
-        if (editing && id) {
-            const updated = {
-                name: nickname,
-                scientificName: plantSpecies,
-                location: locations.find(loc => loc.value === location)?.label || location,
-                potSize: potSize || "",
-                careNotes: careNotes || "",
-                wateringFrequency: wateringFrequency || "",
-                notificationsEnabled: enableNotifications,
-                image: photoUrl || "",
-            };
-
-            if (onSave) {
-                onSave({ id, ...updated } as Plant);
-            } else {
-                await updatePlant(id, updated);
-            }
-            setLoading(false);
-            navigate(`/plants/${id}`);
-        } else {
-            console.log(photoUrl)
-            const newPlant: Plant = {
-                id: '',
-                name: nickname,
-                scientificName: plantSpecies,
-                location: locations.find(loc => loc.value === location)?.label || location,
-                potSize: potSize || "",
-                careNotes: careNotes || "",
-                wateringFrequency: wateringFrequency || "",
-                notificationsEnabled: enableNotifications,
-                acquiredDate: new Date(),
-                image: photoUrl || "",
-                status: 'healthy',
-            };
-
-            if (onSave) {
-                onSave(newPlant);
-                setLoading(false);
-                navigate('/');
-            } else {
-                const id = await addPlant(newPlant);
-                setLoading(false);
+                if (onSave) {
+                    onSave({ id, ...updated } as Plant);
+                } else {
+                    await updatePlant(id, updated);
+                }
                 navigate(`/plants/${id}`);
-                return;
+            } else {
+                const newPlant: Plant = {
+                    id: '',
+                    name: nickname,
+                    scientificName: plantSpecies,
+                    location: locations.find(loc => loc.value === location)?.label || location,
+                    potSize: potSize || "",
+                    careNotes: careNotes || "",
+                    wateringFrequency: wateringFrequency || "",
+                    notificationsEnabled: enableNotifications,
+                    acquiredDate: new Date(),
+                    image: photoUrl || "",
+                    status: 'healthy',
+                };
+
+                if (onSave) {
+                    onSave(newPlant);
+                    navigate('/');
+                } else {
+                    const createdId = await addPlant(newPlant);
+                    navigate(`/plants/${createdId}`);
+                }
             }
+        } catch (err) {
+            console.error('Failed to save plant', err);
+            setError(t('PlantSaveError'));
+        } finally {
+            setLoading(false);
         }
     }; return (
         <PageLayout
@@ -480,6 +484,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                             </ToggleRow>
                         </FormGroup>
                     </FormSection>
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
                     <SaveButton type="submit" disabled={loading}>
                         {loading ? <Spinner /> : t("SavePlant")}
                     </SaveButton>
