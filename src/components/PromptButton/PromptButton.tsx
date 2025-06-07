@@ -10,6 +10,7 @@ import {
     RemoveImageButton,
 } from './PromptButton.styles';
 import type { PromptButtonProps } from './PromptButton.types';
+import { Spinner } from '../Common';
 
 const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     const [open, setOpen] = useState(false);
@@ -17,6 +18,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     const [text, setText] = useState('');
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +60,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
             console.warn('No API key set');
             return;
         }
+        setLoading(true);
 
         const content: Array<{ type: 'text' | 'image_url'; text?: string; image_url?: { url: string } }> = [
             { type: 'text', text },
@@ -84,6 +87,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
         } catch (err) {
             console.error('Error sending to ChatGPT', err);
         }
+        setLoading(false);
         setOpen(false);
         setText('');
         setFile(null);
@@ -124,7 +128,9 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
                                 onChange={handleFileChange}
                                 ref={fileInputRef}
                             />
-                            <button type="submit">Send</button>
+                            <button type="submit" disabled={loading}>
+                                {loading ? <Spinner /> : 'Send'}
+                            </button>
                         </form>
                     </PromptModal>
                 </PromptOverlay>

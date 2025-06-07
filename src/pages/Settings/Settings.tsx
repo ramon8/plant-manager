@@ -17,6 +17,7 @@ import {
 import type { SelectSettingProps, SettingsProps } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppData, useAuth } from '../../context';
+import { Spinner } from '../../components/Common';
 
 
 const SelectSetting: React.FC<SelectSettingProps> = ({
@@ -55,6 +56,13 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
         updateDisplaySetting,
     } = useAppData();
     const { logout } = useAuth();
+    const [loading, setLoading] = React.useState(false);
+
+    const handleLogout = async () => {
+        setLoading(true);
+        await logout();
+        setLoading(false);
+    };
 
 
     return (
@@ -104,8 +112,8 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
 
 
                     <SettingsSection>
-                        <ActionButton variant="danger" onClick={logout}>
-                            {t('Logout')}
+                        <ActionButton variant="danger" onClick={handleLogout} disabled={loading}>
+                            {loading ? <Spinner /> : t('Logout')}
                         </ActionButton>
                     </SettingsSection>
                 </SettingsSections>

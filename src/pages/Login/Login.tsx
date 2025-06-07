@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Sprout } from 'lucide-react';
 import { useAuth } from '../../context';
+import { Spinner } from '../../components/Common';
 import { useNavigate } from 'react-router-dom';
 import {
   LoginContainer,
@@ -21,14 +22,17 @@ const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     if (await login(username, password)) {
       setError('');
     } else {
       setError(t('InvalidCredentials'));
     }
+    setLoading(false);
   };
 
   return (
@@ -50,7 +54,9 @@ const Login: React.FC = () => {
           onChange={e => setPassword(e.target.value)}
         />
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <SubmitButton type="submit">{t('Login')}</SubmitButton>
+        <SubmitButton type="submit" disabled={loading}>
+          {loading ? <Spinner /> : t('Login')}
+        </SubmitButton>
         <CreateAccountButton
           type="button"
           onClick={() => navigate('/signup')}
