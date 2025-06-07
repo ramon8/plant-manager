@@ -90,13 +90,7 @@ function AnimatedRoutes() {
         animate="animate"
         exit="exit"
         transition={{ duration: 0.15, ease: "easeInOut" }}
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          top: 0,
-          left: 0,
-        }}
+        style={{ width: '100%', height: '100%' }}
       >
         <Routes location={location}>
           <Route path="/" element={<Dashboard />} />
