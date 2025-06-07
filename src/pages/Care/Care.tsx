@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Header from '../../components/Header';
 import Calendar from '../../components/Calendar';
 import Task from '../../components/Task';
+import PageLayout from '../../components/PageLayout';
 import type { CalendarTask } from '../../components/Calendar';
 import {
-    CareContainer,
     TasksSection,
     SectionTitle,
     TasksList,
@@ -76,17 +75,13 @@ const Care: React.FC<CareProps> = ({ className }) => {
     const todayTasks = mockTasks.filter(task => {
         const today = new Date();
         return task.dueDate.toDateString() === today.toDateString();
-    });
-
-    const upcomingTasks = mockTasks.filter(task => {
+    });    const upcomingTasks = mockTasks.filter(task => {
         const today = new Date();
         return task.dueDate > today;
     }).slice(0, 3); // Show only next 3 upcoming tasks
 
     return (
-        <CareContainer className={className}>
-            <Header title={t('CareSchedule')} subtitle={t('KeepTrack')} />
-
+        <PageLayout title={t('CareSchedule')} subtitle={t('KeepTrack')} className={className}>
             <Calendar 
                 selectedDate={selectedDate}
                 onDateSelect={handleDateSelect}
@@ -94,7 +89,8 @@ const Care: React.FC<CareProps> = ({ className }) => {
             />
 
             <TasksSection>
-                <SectionTitle>{t('TodaysTasks')}</SectionTitle>                <TasksList>
+                <SectionTitle>{t('TodaysTasks')}</SectionTitle>
+                <TasksList>
                     {todayTasks.length > 0 ? (
                         todayTasks.map(task => (
                             <Task
@@ -111,7 +107,8 @@ const Care: React.FC<CareProps> = ({ className }) => {
             </TasksSection>
 
             <TasksSection>
-                <SectionTitle>{t('UpcomingTasks')}</SectionTitle>                <TasksList>
+                <SectionTitle>{t('UpcomingTasks')}</SectionTitle>
+                <TasksList>
                     {upcomingTasks.length > 0 ? (
                         upcomingTasks.map(task => (
                             <Task
@@ -126,7 +123,7 @@ const Care: React.FC<CareProps> = ({ className }) => {
                     )}
                 </TasksList>
             </TasksSection>
-        </CareContainer>
+        </PageLayout>
     );
 };
 

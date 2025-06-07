@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Clock, MapPin, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -24,12 +24,22 @@ import {
 } from './Dashboard.styles';
 import type { DashboardProps } from './Dashboard.types';
 import { useAppData } from '../../context';
+import PageLayout from '../../components/PageLayout';
+import { useFirestore } from '../../hooks/useFirestore';
 
 const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilter, setSelectedFilter] = useState<string>('All');
     const navigate = useNavigate();
     const { plants } = useAppData();
+    const { get } = useFirestore('plants');
+
+    useEffect(() => {
+        (async () => {
+            console.log(await get())
+        })()
+    }, []);
+
 
     // Available filter options
     const { t } = useTranslation();
@@ -72,12 +82,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
         return matchesSearch && matchesFilter;
     });
     return (
-        <DashboardContainer className={className}>
-            <PageHeader>
-                <PageTitle>{t('MyPlants')}</PageTitle>
-                <PlantCount>{filteredPlants.length} of {plants.length} {t('AllPlants').toLowerCase()}</PlantCount>
-            </PageHeader>
-
+        <PageLayout title={t('MyPlants')} subtitle={`${filteredPlants.length} of ${plants.length} ${t('AllPlants').toLowerCase()}`} className={className}>
             <SearchSection>
                 <SearchInput>
                     <Search className="search-icon" size={20} />
@@ -109,7 +114,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                     filteredPlants.map((plant) => (
                         <PlantCard key={plant.id} onClick={() => navigate(`/plants/${plant.id}`)}>
                             <PlantAvatar>
-                                {plant.name.charAt(0)}
+                                {plant?.name?.charAt(0)}
                             </PlantAvatar>
                             <PlantInfo>
                                 <PlantName>{plant.name}</PlantName>
@@ -132,7 +137,7 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                     <span>{t('NoPlantsMatch')}</span>
                 )}
             </PlantsGrid>
-        </DashboardContainer>
+        </PageLayout>
     );
 };
 

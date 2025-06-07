@@ -98,12 +98,6 @@ export const PlantCard = styled.div`
     transform: scale(0.98);
   }
   
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    &:hover {
-      box-shadow: ${({ theme }) => theme.shadows.md};
-      transform: translateY(-1px);
-    }
-  }
 `;
 
 export const PlantAvatar = styled.div`

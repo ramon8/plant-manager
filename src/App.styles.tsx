@@ -13,15 +13,10 @@ export const MainContent = styled.main`
   padding-bottom: calc(80px + ${({ theme }) => theme.spacing.md}); /* Space for bottom nav */
   max-width: 100vw;
   overflow-x: hidden;
+  position: relative; /* Add relative positioning for absolute children */
+  width: 100%;
   
   /* Add a small top padding on mobile for pages without sticky headers */
   padding-top: ${({ theme }) => theme.spacing.md};
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.tablet}) {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 0 ${({ theme }) => theme.spacing.lg} ${({ theme }) => theme.spacing.xl};
-    padding-bottom: calc(80px + ${({ theme }) => theme.spacing.xl});
-    padding-top: ${({ theme }) => theme.spacing.md};
-  }
 `;
