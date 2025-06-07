@@ -27,7 +27,8 @@ import {
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
 import { Spinner } from '../../components/Common';
-import { useAppData } from '../../context';
+import { useAppData, useAuth } from '../../context';
+import { useStorage } from '../../hooks/useStorage';
 
 import OpenAI from "openai";
 
@@ -90,6 +91,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id?: string }>();
     const { plants, addPlant, updatePlant } = useAppData();
+    const { user } = useAuth();
+    const { upload } = useStorage();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -100,6 +103,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [photoFile, setPhotoFile] = useState<File | null>(null);
     const [scanning, setScanning] = useState(false);
     const photoInputRef = useRef<HTMLInputElement | null>(null);
     const scanInputRef = useRef<HTMLInputElement | null>(null);
@@ -142,6 +146,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const handlePhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+        setPhotoFile(file);
 
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -226,6 +231,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const handleScanSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+        setPhotoFile(file);
 
         setScanning(true);
 
@@ -254,6 +260,16 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         e.preventDefault();
         setLoading(true);
 
+        let imageUrl = photoUrl || '';
+        if (photoFile) {
+            const path = `plants/${user?.uid}/${Date.now()}_${photoFile.name}`;
+            try {
+                imageUrl = await upload(path, photoFile);
+            } catch (err) {
+                console.error('Image upload failed', err);
+            }
+        }
+
         if (editing && id) {
             const updated = {
                 name: nickname,
@@ -263,7 +279,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 careNotes: careNotes || "",
                 wateringFrequency: wateringFrequency || "",
                 notificationsEnabled: enableNotifications,
-                image: photoUrl || "",
+                image: imageUrl,
             };
 
             if (onSave) {
@@ -274,7 +290,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             setLoading(false);
             navigate(`/plants/${id}`);
         } else {
-            console.log(photoUrl)
             const newPlant: Plant = {
                 id: '',
                 name: nickname,
@@ -285,7 +300,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                 wateringFrequency: wateringFrequency || "",
                 notificationsEnabled: enableNotifications,
                 acquiredDate: new Date(),
-                image: photoUrl || "",
+                image: imageUrl,
                 status: 'healthy',
             };
 
