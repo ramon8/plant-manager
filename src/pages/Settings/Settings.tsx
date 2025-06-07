@@ -5,22 +5,14 @@ import {
     SettingsHeader,
     SettingsSections,
     SettingsSection,
-    SettingItem,
-    SettingLabel,
-    SettingDescription,
-    Checkbox,
-    Select,
-    DataActionsContainer,
-    ActionButton,
-    SettingRow,
-    SettingContent,
-    SettingControl,
 } from './Settings.styles';
-import type { ToggleSettingProps, SelectSettingProps, SettingsProps } from './Settings.types';
+import type { SettingsProps } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppData } from '../../context';
 
 
+// Components currently unused but kept for future settings implementation
+/*
 const ToggleSetting: React.FC<ToggleSettingProps> = ({
     label,
     description,
@@ -70,34 +62,33 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
         </SettingRow>
     </SettingItem>
 );
+*/
 
 const Settings: React.FC<SettingsProps> = ({ className }) => {
     const { t, i18n } = useTranslation();
     const { setTheme } = useTheme();
     const {
         settings,
-        updateNotificationSetting,
         updateDisplaySetting,
-        updateCareSetting,
     } = useAppData();
 
 
+    // Placeholder actions for future data management features
+    /*
     const handleExportData = () => {
-        // TODO: Implement data export functionality
         console.log('Export data clicked');
     };
 
     const handleImportData = () => {
-        // TODO: Implement data import functionality
         console.log('Import data clicked');
     };
 
     const handleResetData = () => {
-        // TODO: Implement data reset functionality
         if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
             console.log('Reset data confirmed');
         }
     };
+    */
 
     return (
         <SettingsContainer className={className}>
