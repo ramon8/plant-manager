@@ -5,15 +5,7 @@ import {
     SettingsContainer,
     SettingsSections,
     SettingsSection,
-<<<<<<< HEAD
-    SettingItem,
-    SettingLabel,
-    SettingDescription,
     Select,
-    SettingRow,
-=======
-    Select,
->>>>>>> 29f3c094832ae3592b1cb8966e98fda326ea47c2
     SettingContent,
     SettingControl,
     SettingDescription,
