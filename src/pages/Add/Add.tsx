@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
 import { Select } from 'antd';
@@ -91,6 +91,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [wateringFrequency, setWateringFrequency] = useState('');
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+    const photoInputRef = useRef<HTMLInputElement | null>(null);
+    const scanInputRef = useRef<HTMLInputElement | null>(null);
 
     const editing = Boolean(id);
 
@@ -124,15 +126,73 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     };
 
     const handleTakePhoto = () => {
-        // This would be integrated with device camera in a real app
-        // For now, just set a placeholder image
-        setPhotoUrl('https://via.placeholder.com/120');
-        console.log('Opening camera...');
+        photoInputRef.current?.click();
+    };
+
+    const handlePhotoSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        setPhotoUrl(url);
     };
 
     const handleScanPlant = () => {
-        // This would integrate with a plant identification API in a real app
-        console.log('Scanning plant...');
+        scanInputRef.current?.click();
+    };
+
+    const identifyPlant = async (file: File) => {
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const base64 = (reader.result as string).split(',')[1];
+            try {
+                const res = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-4-vision-preview',
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'Identify the plant from the image and respond with JSON {"name":"<common>","scientificName":"<scientific>"}'
+                            },
+                            {
+                                role: 'user',
+                                content: [
+                                    {
+                                        type: 'image_url',
+                                        image_url: `data:${file.type};base64,${base64}`,
+                                    },
+                                ],
+                            },
+                        ],
+                        max_tokens: 100,
+                    }),
+                });
+                const data = await res.json();
+                const text = data.choices?.[0]?.message?.content || '';
+                try {
+                    const json = JSON.parse(text);
+                    if (json.name) setNickname(json.name);
+                    if (json.scientificName) setPlantSpecies(json.scientificName);
+                } catch (err) {
+                    console.error('Failed to parse plant data', err);
+                }
+            } catch (err) {
+                console.error('Plant identification failed', err);
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleScanSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        setPhotoUrl(url);
+        identifyPlant(file);
     };
 
     const wateringFrequencies: WateringFrequency[] = [
@@ -215,17 +275,33 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                             )}
                         </PhotoPlaceholder>
 
-                        <PhotoActions>
-                            <PhotoButton type="button" onClick={handleTakePhoto}>
-                                <Camera size={18} />
-                                {t('TakePhoto')}
-                            </PhotoButton>
-                            <PhotoButton type="button" onClick={handleScanPlant}>
-                                <ScanText size={18} />
-                                {t('ScanPlant')}
-                            </PhotoButton>
-                        </PhotoActions>
-                    </PhotoSection>
+                    <PhotoActions>
+                        <PhotoButton type="button" onClick={handleTakePhoto}>
+                            <Camera size={18} />
+                            {t('TakePhoto')}
+                        </PhotoButton>
+                        <PhotoButton type="button" onClick={handleScanPlant}>
+                            <ScanText size={18} />
+                            {t('ScanPlant')}
+                        </PhotoButton>
+                        <input
+                            ref={photoInputRef}
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            style={{ display: 'none' }}
+                            onChange={handlePhotoSelected}
+                        />
+                        <input
+                            ref={scanInputRef}
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            style={{ display: 'none' }}
+                            onChange={handleScanSelected}
+                        />
+                    </PhotoActions>
+                </PhotoSection>
 
                     <FormSection>                    <FormGroup>
                         <Label htmlFor="species">{t("PlantSpecies")}</Label>
