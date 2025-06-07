@@ -225,6 +225,7 @@ export const SourceOverlay = styled.div`
   right: 0;
   bottom: 0;
   background-color: ${({ theme }) => theme.colors.overlay};
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
