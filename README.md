@@ -8,6 +8,7 @@ A comprehensive home plant management application built with React, TypeScript, 
 - **Plant Inventory**: Add, edit, and organize your plant collection with detailed profiles
 - **Plant Identification**: Track plant names (common and scientific), species, and varieties
 - **Photo Gallery**: Upload and manage photos of your plants to track their growth
+- **AI Plant Scan**: Take or upload a photo and let ChatGPT suggest the plant name
 - **Plant Categories**: Organize plants by type (houseplants, succulents, herbs, etc.)
 
 ### Care Scheduling & Reminders
@@ -134,6 +135,14 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
 
+To enable plant identification when scanning photos, create a ChatGPT API key and add it to the `.env` file:
+
+```bash
+VITE_OPENAI_API_KEY=your_openai_key
+```
+
 The `useFirestore` hook in `src/hooks/useFirestore.ts` provides simple `get`, `post` and `put` helpers for interacting with Cloud Firestore collections.
+
+Uploaded plant photos are saved in Firebase Storage using the `useStorage` hook in `src/hooks/useStorage.ts` so images remain available when you revisit your plants.
 
 New users can register via the **Create Account** page, accessible from the login screen. Registration uses Firebase Authentication with email and password.

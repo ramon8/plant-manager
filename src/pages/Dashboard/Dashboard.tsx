@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Clock, MapPin, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import {
-    DashboardContainer,
-    PageHeader,
-    PageTitle,
-    PlantCount,
     SearchSection,
     SearchInput,
     PlantsGrid,
@@ -25,20 +21,12 @@ import {
 import type { DashboardProps } from './Dashboard.types';
 import { useAppData } from '../../context';
 import PageLayout from '../../components/PageLayout';
-import { useFirestore } from '../../hooks/useFirestore';
 
 const Dashboard: React.FC<DashboardProps> = ({ className }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedFilter, setSelectedFilter] = useState<string>('All');
     const navigate = useNavigate();
     const { plants } = useAppData();
-    const { get } = useFirestore('plants');
-
-    useEffect(() => {
-        (async () => {
-            console.log(await get())
-        })()
-    }, []);
 
 
     // Available filter options
@@ -114,7 +102,11 @@ const Dashboard: React.FC<DashboardProps> = ({ className }) => {
                     filteredPlants.map((plant) => (
                         <PlantCard key={plant.id} onClick={() => navigate(`/plants/${plant.id}`)}>
                             <PlantAvatar>
-                                {plant?.name?.charAt(0)}
+                                {plant.image ? (
+                                    <img src={plant.image} alt={plant.name} />
+                                ) : (
+                                    plant?.name?.charAt(0)
+                                )}
                             </PlantAvatar>
                             <PlantInfo>
                                 <PlantName>{plant.name}</PlantName>

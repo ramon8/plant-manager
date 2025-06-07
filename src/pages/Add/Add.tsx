@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Camera, ScanText, Droplets } from 'lucide-react';
 import { Select } from 'antd';
@@ -25,8 +25,16 @@ import {
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
-import { useAppData } from '../../context';
 import { Spinner } from '../../components/Common';
+import { useAppData, useAuth } from '../../context';
+import { useStorage } from '../../hooks/useStorage';
+
+import OpenAI from "openai";
+
+const openai = new OpenAI({
+    apiKey: import.meta.env.VITE_OPEN_AI_API_KEY,
+    dangerouslyAllowBrowser: true
+});
 
 // Styled Ant Design Select components
 const StyledSelect = styled(Select)`
@@ -82,6 +90,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id?: string }>();
     const { plants, addPlant, updatePlant } = useAppData();
+    const { user } = useAuth();
+    const { upload } = useStorage();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -93,6 +103,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [scanning, setScanning] = useState(false);
+    const photoInputRef = useRef<HTMLInputElement | null>(null);
+    const scanInputRef = useRef<HTMLInputElement | null>(null);
 
     const editing = Boolean(id);
 
@@ -126,19 +138,104 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     };
 
     const handleTakePhoto = () => {
-        // This would be integrated with device camera in a real app
-        // For now, just set a placeholder image
-        setPhotoUrl('https://via.placeholder.com/120');
-        console.log('Opening camera...');
+        photoInputRef.current?.click();
     };
 
-    const handleScanPlant = async () => {
-        // This would integrate with a plant identification API in a real app
-        console.log('Scanning plant...');
-        setScanning(true);
-        // Simulate async scan
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        setScanning(false);
+    const handlePhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !user) return;
+        const preview = URL.createObjectURL(file);
+        setPhotoUrl(preview);
+        try {
+            const path = `plants/${user.uid}/${Date.now()}_${file.name}`;
+            const url = await upload(path, file);
+            setPhotoUrl(url);
+        } catch (err) {
+            console.error('Image upload failed', err);
+        }
+    };
+
+
+    const handleScanPlant = () => {
+        scanInputRef.current?.click();
+    };
+
+    async function identifyPlant(file: File) {
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const base64 = (reader.result as string).split(',')[1];
+            try {
+                const completion = await openai.chat.completions.create({
+                    model: "gpt-4o",
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You’re a botanist. Identify the plant and return EXACTLY the function call in Spanish.",
+                        },
+                        {
+                            role: "user",
+                            content: [
+                                { type: "text", text: "Please identify the plant in this image." },
+                                { type: "image_url", image_url: { url: `data:${file.type};base64,${base64}` } }
+                            ]
+                        },
+                    ], tools: [
+                        {
+                            type: "function",
+                            function: {
+                                name: "identify_plant",
+                                description: "Identify a plant and return its details",
+                                parameters: {
+                                    type: "object",
+                                    properties: {
+                                        commonName: { type: "string", description: "The plant’s common name" },
+                                        scientificName: { type: "string", description: "The plant’s scientific name" },
+                                        wateringFrequency: { type: "string", description: "How often the plant should be watered" },
+                                        careNotes: { type: "string", description: "Additional care notes for the plant" },
+                                        status: { type: "string", enum: ["healthy", "needsAttention", "sick"], description: "The health status of the plant" },
+                                    },
+                                    required: ["commonName", "scientificName"],
+                                },
+                            },
+                        },
+                    ],
+                    tool_choice: { type: "function", function: { name: "identify_plant" } },
+                });
+
+                const toolCall = completion.choices[0].message.tool_calls?.[0];
+                if (!toolCall?.function?.arguments) {
+                    throw new Error("No tool call in response");
+                }
+
+                const plantDetails = JSON.parse(toolCall.function.arguments);
+
+                // Update the form with the identified plant information
+                setNickname(plantDetails.commonName);
+                setPlantSpecies(plantDetails.scientificName);
+                setCareNotes(plantDetails.careNotes || "");
+                setWateringFrequency(plantDetails.wateringFrequency || "");
+
+                return plantDetails;
+            } catch (err) {
+                console.error('Plant identification failed', err);
+            }
+        };
+        reader.readAsDataURL(file);
+    }
+
+    const handleScanSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file || !user) return;
+        const preview = URL.createObjectURL(file);
+        setPhotoUrl(preview);
+        try {
+            const path = `plants/${user.uid}/${Date.now()}_${file.name}`;
+            const url = await upload(path, file);
+            setPhotoUrl(url);
+        } catch (err) {
+            console.error('Image upload failed', err);
+        }
+        identifyPlant(file);
     };
 
     const wateringFrequencies: WateringFrequency[] = [
@@ -173,6 +270,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             setLoading(false);
             navigate(`/plants/${id}`);
         } else {
+            console.log(photoUrl)
             const newPlant: Plant = {
                 id: '',
                 name: nickname,
@@ -234,29 +332,26 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 <ScanText size={18} />
                                 {scanning ? <Spinner /> : t('ScanPlant')}
                             </PhotoButton>
+                            <input
+                                ref={photoInputRef}
+                                type="file"
+                                accept="image/*"
+                                capture="environment"
+                                style={{ display: 'none' }}
+                                onChange={handlePhotoSelected}
+                            />
+                            <input
+                                ref={scanInputRef}
+                                type="file"
+                                accept="image/*"
+                                capture="environment"
+                                style={{ display: 'none' }}
+                                onChange={handleScanSelected}
+                            />
                         </PhotoActions>
                     </PhotoSection>
 
-                    <FormSection>                    <FormGroup>
-                        <Label htmlFor="species">{t("PlantSpecies")}</Label>
-                        <StyledSelect
-                            placeholder={t("SelectSpecies")}
-                            value={plantSpecies}
-                            onChange={(value) => setPlantSpecies(value as string)}
-                            showSearch
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={[
-                                { value: 'pothos', label: 'Pothos (Epipremnum aureum)' },
-                                { value: 'snake_plant', label: 'Snake Plant (Sansevieria trifasciata)' },
-                                { value: 'fiddle_leaf', label: 'Fiddle Leaf Fig (Ficus lyrata)' },
-                                { value: 'monstera', label: 'Monstera Deliciosa' },
-                                { value: 'peace_lily', label: 'Peace Lily (Spathiphyllum)' },
-                            ]}
-                        />
-                    </FormGroup>
-
+                    <FormSection>
                         <FormGroup>
                             <Label htmlFor="nickname">{t("PlantNickname")}</Label>
                             <Input
@@ -267,7 +362,25 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 onChange={(e) => setNickname(e.target.value)}
                             />
                         </FormGroup>
-
+                        <FormGroup>
+                            <Label htmlFor="species">{t("PlantSpecies")}</Label>
+                            <StyledSelect
+                                placeholder={t("SelectSpecies")}
+                                value={plantSpecies}
+                                onChange={(value) => setPlantSpecies(value as string)}
+                                showSearch
+                                filterOption={(input, option) =>
+                                    (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={[
+                                    { value: 'pothos', label: 'Pothos (Epipremnum aureum)' },
+                                    { value: 'snake_plant', label: 'Snake Plant (Sansevieria trifasciata)' },
+                                    { value: 'fiddle_leaf', label: 'Fiddle Leaf Fig (Ficus lyrata)' },
+                                    { value: 'monstera', label: 'Monstera Deliciosa' },
+                                    { value: 'peace_lily', label: 'Peace Lily (Spathiphyllum)' },
+                                ]}
+                            />
+                        </FormGroup>
                         <FormRow>
                             <FormGroup>
                                 <Label htmlFor="potSize">{t("PotSize")}</Label>
@@ -278,7 +391,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                     options={potSizes}
                                 />
                             </FormGroup>
-
                             <FormGroup>
                                 <Label htmlFor="location">{t("Location")}</Label>
                                 <StyledSelect
@@ -289,7 +401,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 />
                             </FormGroup>
                         </FormRow>
-
                         <FormGroup>
                             <Label htmlFor="careNotes">{t("CareNotes")}</Label>
                             <Textarea
@@ -300,7 +411,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                             />
                         </FormGroup>
                     </FormSection>
-
                     <FormSection>
                         <WateringScheduleIcon>
                             <Droplets />
@@ -314,7 +424,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 options={wateringFrequencies}
                             />
                         </FormGroup>
-
                         <FormGroup>
                             <ToggleRow>
                                 <Label htmlFor="notifications">{t("PushNotifications")}</Label>
