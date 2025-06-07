@@ -21,7 +21,8 @@ import {
     ToggleRow,
     Toggle,
     ToggleSlider,
-    SaveButton
+    SaveButton,
+    ScanOverlay,
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
@@ -156,12 +157,13 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     };
 
     async function identifyPlant(file: File) {
-        const reader = new FileReader();
-        reader.onload = async () => {
-            const base64 = (reader.result as string).split(',')[1];
-            try {
-                const completion = await openai.chat.completions.create({
-                    model: "gpt-4o",
+        return new Promise<void>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const base64 = (reader.result as string).split(',')[1];
+                try {
+                    const completion = await openai.chat.completions.create({
+                        model: "gpt-4o",
                     messages: [
                         {
                             role: "system",
@@ -197,30 +199,35 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     tool_choice: { type: "function", function: { name: "identify_plant" } },
                 });
 
-                const toolCall = completion.choices[0].message.tool_calls?.[0];
-                if (!toolCall?.function?.arguments) {
-                    throw new Error("No tool call in response");
+                    const toolCall = completion.choices[0].message.tool_calls?.[0];
+                    if (!toolCall?.function?.arguments) {
+                        throw new Error("No tool call in response");
+                    }
+
+                    const plantDetails = JSON.parse(toolCall.function.arguments);
+
+                    // Update the form with the identified plant information
+                    setNickname(plantDetails.commonName);
+                    setPlantSpecies(plantDetails.scientificName);
+                    setCareNotes(plantDetails.careNotes || "");
+                    setWateringFrequency(plantDetails.wateringFrequency || "");
+
+                    resolve();
+                } catch (err) {
+                    console.error('Plant identification failed', err);
+                    reject(err);
                 }
-
-                const plantDetails = JSON.parse(toolCall.function.arguments);
-
-                // Update the form with the identified plant information
-                setNickname(plantDetails.commonName);
-                setPlantSpecies(plantDetails.scientificName);
-                setCareNotes(plantDetails.careNotes || "");
-                setWateringFrequency(plantDetails.wateringFrequency || "");
-
-                return plantDetails;
-            } catch (err) {
-                console.error('Plant identification failed', err);
-            }
-        };
-        reader.readAsDataURL(file);
+            };
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+        });
     }
 
     const handleScanSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
+
+        setScanning(true);
 
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -228,7 +235,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             setPhotoUrl(result);
         };
         reader.readAsDataURL(file);
-        identifyPlant(file);
+        try {
+            await identifyPlant(file);
+        } finally {
+            setScanning(false);
+        }
     };
 
     const wateringFrequencies: WateringFrequency[] = [
@@ -436,6 +447,11 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                     </SaveButton>
                 </form>
             </AddContainer>
+            {scanning && (
+                <ScanOverlay>
+                    <Spinner style={{ width: '48px', height: '48px' }} />
+                </ScanOverlay>
+            )}
         </PageLayout>
     );
 };
