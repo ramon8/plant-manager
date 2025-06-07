@@ -13,6 +13,7 @@ import type { PromptButtonProps } from './PromptButton.types';
 
 const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     const [open, setOpen] = useState(false);
+    const apiKey = import.meta.env.VITE_OPEN_AI_API_KEY;
     const [text, setText] = useState('');
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -38,9 +39,51 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const fileToDataUrl = (file: File) => {
+        return new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = () => reject(new Error('Failed to read file'));
+            reader.readAsDataURL(file);
+        });
+    };
+
+    const handleButtonClick = () => {
+        setOpen(true);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Prompt submitted', { text, file });
+        if (!apiKey) {
+            console.warn('No API key set');
+            return;
+        }
+
+        const content: Array<{ type: 'text' | 'image_url'; text?: string; image_url?: { url: string } }> = [
+            { type: 'text', text },
+        ];
+        if (file) {
+            const dataUrl = await fileToDataUrl(file);
+            content.push({ type: 'image_url', image_url: { url: dataUrl } });
+        }
+
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${apiKey}`,
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4o',
+                    messages: [{ role: 'user', content }],
+                }),
+            });
+            const data = await response.json();
+            console.log('ChatGPT response', data);
+        } catch (err) {
+            console.error('Error sending to ChatGPT', err);
+        }
         setOpen(false);
         setText('');
         setFile(null);
@@ -52,7 +95,7 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
 
     return (
         <>
-            <ButtonContainer className={className} onClick={() => setOpen(true)}>
+            <ButtonContainer className={className} onClick={handleButtonClick}>
                 <MessageSquare size={20} />
             </ButtonContainer>
             {open && (
