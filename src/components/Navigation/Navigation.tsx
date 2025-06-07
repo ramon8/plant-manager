@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Home, Calendar, Plus, Settings } from 'lucide-react';
+import { Home, Plus, Settings } from 'lucide-react';
 import {
     NavigationWrapper,
     NavigationContainer,
@@ -13,7 +13,6 @@ import type { NavigationProps } from './Navigation.types';
 
 const navItems = [
     { to: '/', icon: Home, labelKey: 'Dashboard' },
-    { to: '/care', icon: Calendar, labelKey: 'Calendar' },
     { to: '/add', icon: Plus, labelKey: 'Add' },
     { to: '/settings', icon: Settings, labelKey: 'Settings' },
 ] as const;

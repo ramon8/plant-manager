@@ -13,10 +13,6 @@ import {
     ScientificName,
     TagsContainer,
     Tag,
-    HealthSection,
-    HealthLabel,
-    HealthBar,
-    HealthIndicator,
     InfoCardsContainer,
     InfoCard,
     InfoIconWrapper,
@@ -140,8 +136,7 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
         ? getRelativeWateringDay(new Date(plant.lastWatered.getTime() + 5 * 24 * 60 * 60 * 1000), t)
         : t('NotSet');
 
-    // Health percentage (mock value for demo)
-    const healthPercentage = 92; return (
+    return (
         <PageLayout
             title={plant.name}
             subtitle={plant.scientificName || t('PlantDetails')}
@@ -167,15 +162,6 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                         </PlantDetails>
                     </PlantInfo>
 
-                    <HealthSection>
-                        <HealthLabel>
-                            <span>{t('PlantHealth')}</span>
-                            <span>{healthPercentage}%</span>
-                        </HealthLabel>
-                        <HealthBar>
-                            <HealthIndicator percent={healthPercentage} />
-                        </HealthBar>
-                    </HealthSection>
                 </ProfileCard>
 
                 <InfoCardsContainer>

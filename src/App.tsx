@@ -7,7 +7,6 @@ import { AppDataProvider, AuthProvider, useAuth } from './context';
 import { AppContainer, MainContent } from './App.styles';
 import Navigation from './components/Navigation';
 import Dashboard from './pages/Dashboard';
-import Care from './pages/Care';
 import AddPlant from './pages/Add';
 import PlantDetail from './pages/PlantDetail';
 import Settings from './pages/Settings';
@@ -16,7 +15,7 @@ import Signup from './pages/Signup';
 import LoadingPage from './pages/Loading';
 import PromptButton from './components/PromptButton';
 
-const navPaths = ['/', '/care', '/add', '/settings'] as const;
+const navPaths = ['/', '/add', '/settings'] as const;
 
 type Direction = 'left' | 'right' | 'up' | 'down';
 
@@ -98,7 +97,6 @@ function AnimatedRoutes() {
           <Route path="/plants/:id" element={<PlantDetail />} />
           <Route path="/plants/:id/edit" element={<AddPlant />} />
           <Route path="/add" element={<AddPlant />} />
-          <Route path="/care" element={<Care />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </motion.div>
