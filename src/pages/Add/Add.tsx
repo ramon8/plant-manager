@@ -93,6 +93,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [scanning, setScanning] = useState(false);
 
     const editing = Boolean(id);
 
@@ -132,9 +133,13 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         console.log('Opening camera...');
     };
 
-    const handleScanPlant = () => {
+    const handleScanPlant = async () => {
         // This would integrate with a plant identification API in a real app
         console.log('Scanning plant...');
+        setScanning(true);
+        // Simulate async scan
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        setScanning(false);
     };
 
     const wateringFrequencies: WateringFrequency[] = [
@@ -226,9 +231,9 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 <Camera size={18} />
                                 {t('TakePhoto')}
                             </PhotoButton>
-                            <PhotoButton type="button" onClick={handleScanPlant}>
+                            <PhotoButton type="button" onClick={handleScanPlant} disabled={scanning}>
                                 <ScanText size={18} />
-                                {t('ScanPlant')}
+                                {scanning ? <Spinner /> : t('ScanPlant')}
                             </PhotoButton>
                         </PhotoActions>
                     </PhotoSection>
