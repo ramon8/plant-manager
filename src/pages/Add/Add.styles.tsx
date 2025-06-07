@@ -193,6 +193,11 @@ export const SaveButton = styled(Button).attrs({ variant: 'primary' })`
   margin-top: ${({ theme }) => theme.spacing.xl};
 `;
 
+export const ErrorMessage = styled.p`
+  color: red;
+  text-align: center;
+`;
+
 export const ScanOverlay = styled.div`
   position: fixed;
   top: 0;
