@@ -13,9 +13,7 @@ import type { PromptButtonProps } from './PromptButton.types';
 
 const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     const [open, setOpen] = useState(false);
-    const [showLogin, setShowLogin] = useState(false);
-    const [apiKey, setApiKey] = useState<string | null>(() => localStorage.getItem('chatgptApiKey'));
-    const [apiKeyInput, setApiKeyInput] = useState('');
+    const apiKey = import.meta.env.VITE_OPEN_AI_API_KEY;
     const [text, setText] = useState('');
     const [file, setFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -51,19 +49,6 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
     };
 
     const handleButtonClick = () => {
-        if (apiKey) {
-            setOpen(true);
-        } else {
-            setShowLogin(true);
-        }
-    };
-
-    const handleLogin = (e: React.FormEvent) => {
-        e.preventDefault();
-        localStorage.setItem('chatgptApiKey', apiKeyInput);
-        setApiKey(apiKeyInput);
-        setApiKeyInput('');
-        setShowLogin(false);
         setOpen(true);
     };
 
@@ -140,24 +125,6 @@ const PromptButton: React.FC<PromptButtonProps> = ({ className }) => {
                                 ref={fileInputRef}
                             />
                             <button type="submit">Send</button>
-                        </form>
-                    </PromptModal>
-                </PromptOverlay>
-            )}
-            {showLogin && (
-                <PromptOverlay>
-                    <PromptModal>
-                        <CloseButton onClick={() => setShowLogin(false)}>
-                            <X size={16} />
-                        </CloseButton>
-                        <form onSubmit={handleLogin}>
-                            <input
-                                type="password"
-                                placeholder="OpenAI API key"
-                                value={apiKeyInput}
-                                onChange={(e) => setApiKeyInput(e.target.value)}
-                            />
-                            <button type="submit">Save</button>
                         </form>
                     </PromptModal>
                 </PromptOverlay>
