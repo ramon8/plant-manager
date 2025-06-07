@@ -63,6 +63,7 @@ export const AppDataProvider = ({ children }: { children: ReactNode }) => {
   }, [user, get]);
 
   useEffect(() => {
+    console.log('Firestore plants updated:', firestorePlants);
     setPlants(firestorePlants as any);
   }, [firestorePlants]);
 
