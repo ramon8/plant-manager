@@ -25,8 +25,7 @@ import {
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
-import { useAppData, useAuth } from '../../context';
-import { useStorage } from '../../hooks/useStorage';
+import { useAppData } from '../../context';
 
 import OpenAI from "openai";
 
@@ -89,8 +88,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id?: string }>();
     const { plants, addPlant, updatePlant } = useAppData();
-    const { user } = useAuth();
-    const { upload } = useStorage();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -140,16 +137,14 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
     const handlePhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !user) return;
-        const preview = URL.createObjectURL(file);
-        setPhotoUrl(preview);
-        try {
-            const path = `plants/${user.uid}/${Date.now()}_${file.name}`;
-            const url = await upload(path, file);
-            setPhotoUrl(url);
-        } catch (err) {
-            console.error('Image upload failed', err);
-        }
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const result = reader.result as string;
+            setPhotoUrl(result);
+        };
+        reader.readAsDataURL(file);
     };
 
     const handleScanPlant = () => {
@@ -269,16 +264,14 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
     const handleScanSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !user) return;
-        const preview = URL.createObjectURL(file);
-        setPhotoUrl(preview);
-        try {
-            const path = `plants/${user.uid}/${Date.now()}_${file.name}`;
-            const url = await upload(path, file);
-            setPhotoUrl(url);
-        } catch (err) {
-            console.error('Image upload failed', err);
-        }
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const result = reader.result as string;
+            setPhotoUrl(result);
+        };
+        reader.readAsDataURL(file);
         identifyPlant(file);
     };
 
