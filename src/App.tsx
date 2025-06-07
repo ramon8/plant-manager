@@ -13,6 +13,7 @@ import PlantDetail from './pages/PlantDetail';
 import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import LoadingPage from './pages/Loading';
 import PromptButton from './components/PromptButton';
 
 const navPaths = ['/', '/care', '/add', '/settings'] as const;
@@ -115,7 +116,10 @@ function AuthRoutes() {
 }
 
 function RootApp() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) {
+    return <LoadingPage />;
+  }
   if (!user) {
     return <AuthRoutes />;
   }
