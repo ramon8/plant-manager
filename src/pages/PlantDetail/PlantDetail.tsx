@@ -124,8 +124,8 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
         setConfirmingDelete(true);
     };
 
-    const confirmDelete = () => {
-        deletePlant(plant.id);
+    const confirmDelete = async () => {
+        await deletePlant(plant.id);
         navigate('/');
     };
 
