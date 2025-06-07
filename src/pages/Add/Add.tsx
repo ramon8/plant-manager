@@ -156,54 +156,6 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         scanInputRef.current?.click();
     };
 
-    /**const identifyPlant = async (file: File) => {
-        const reader = new FileReader();
-        reader.onload = async () => {
-            const base64 = (reader.result as string).split(',')[1];
-            try {
-                const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: Bearer ${import.meta.env.VITE_OPEN_AI_API_KEY},
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-4-vision-preview',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'Identify the plant from the image and respond with JSON {"name":"<common>","scientificName":"<scientific>"}'
-                            },
-                            {
-                                role: 'user',
-                                content: [
-                                    {
-                                        type: 'image_url',
-                                        image_url: data:${file.type};base64,${base64},
-                                    },
-                                ],
-                            },
-                        ],
-                        max_tokens: 100,
-                    }),
-                });
-                const data = await res.json();
-                const text = data.choices?.[0]?.message?.content || '';
-                try {
-                    const json = JSON.parse(text);
-                    if (json.name) setNickname(json.name);
-                    if (json.scientificName) setPlantSpecies(json.scientificName);
-                } catch (err) {
-                    console.error('Failed to parse plant data', err);
-                }
-            } catch (err) {
-                console.error('Plant identification failed', err);
-            }
-        };
-        reader.readAsDataURL(file);
-    }; */
-
-
     async function identifyPlant(file: File) {
         const reader = new FileReader();
         reader.onload = async () => {
@@ -312,6 +264,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             }
             navigate(`/plants/${id}`);
         } else {
+            console.log(photoUrl)
             const newPlant: Plant = {
                 id: '',
                 name: nickname,
