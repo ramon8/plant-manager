@@ -12,7 +12,7 @@ export const useFirestore = <T extends DocumentWithId>(collectionPath: string) =
 
   const get = useCallback(async () => {
     const snap = await getDocs(collection(db, collectionPath));
-    const docs = snap.docs.map(d => ({ id: d.id, ...(d.data() as T) }));
+    const docs = snap.docs.map(d => ({ ...(d.data() as T), id: d.id } as T));
     setData(docs);
     return docs;
   }, [collectionPath]);

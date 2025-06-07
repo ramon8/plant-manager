@@ -25,6 +25,7 @@ import {
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
+import { Spinner } from '../../components/Common';
 import { useAppData } from '../../context';
 
 import OpenAI from "openai";
@@ -97,6 +98,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [wateringFrequency, setWateringFrequency] = useState('');
     const [enableNotifications, setEnableNotifications] = useState(true);
     const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [scanning, setScanning] = useState(false);
     const photoInputRef = useRef<HTMLInputElement | null>(null);
     const scanInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -147,57 +150,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         reader.readAsDataURL(file);
     };
 
+
     const handleScanPlant = () => {
         scanInputRef.current?.click();
     };
-
-    /**const identifyPlant = async (file: File) => {
-        const reader = new FileReader();
-        reader.onload = async () => {
-            const base64 = (reader.result as string).split(',')[1];
-            try {
-                const res = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: Bearer ${import.meta.env.VITE_OPEN_AI_API_KEY},
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-4-vision-preview',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'Identify the plant from the image and respond with JSON {"name":"<common>","scientificName":"<scientific>"}'
-                            },
-                            {
-                                role: 'user',
-                                content: [
-                                    {
-                                        type: 'image_url',
-                                        image_url: data:${file.type};base64,${base64},
-                                    },
-                                ],
-                            },
-                        ],
-                        max_tokens: 100,
-                    }),
-                });
-                const data = await res.json();
-                const text = data.choices?.[0]?.message?.content || '';
-                try {
-                    const json = JSON.parse(text);
-                    if (json.name) setNickname(json.name);
-                    if (json.scientificName) setPlantSpecies(json.scientificName);
-                } catch (err) {
-                    console.error('Failed to parse plant data', err);
-                }
-            } catch (err) {
-                console.error('Plant identification failed', err);
-            }
-        };
-        reader.readAsDataURL(file);
-    }; */
-
 
     async function identifyPlant(file: File) {
         const reader = new FileReader();
@@ -285,6 +241,7 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
 
         if (editing && id) {
             const updated = {
@@ -303,8 +260,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             } else {
                 await updatePlant(id, updated);
             }
+            setLoading(false);
             navigate(`/plants/${id}`);
         } else {
+            console.log(photoUrl)
             const newPlant: Plant = {
                 id: '',
                 name: nickname,
@@ -321,12 +280,14 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
             if (onSave) {
                 onSave(newPlant);
+                setLoading(false);
+                navigate('/');
             } else {
                 const id = await addPlant(newPlant);
+                setLoading(false);
                 navigate(`/plants/${id}`);
                 return;
             }
-            navigate('/');
         }
     }; return (
         <PageLayout
@@ -360,9 +321,9 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 <Camera size={18} />
                                 {t('TakePhoto')}
                             </PhotoButton>
-                            <PhotoButton type="button" onClick={handleScanPlant}>
+                            <PhotoButton type="button" onClick={handleScanPlant} disabled={scanning}>
                                 <ScanText size={18} />
-                                {t('ScanPlant')}
+                                {scanning ? <Spinner /> : t('ScanPlant')}
                             </PhotoButton>
                             <input
                                 ref={photoInputRef}
@@ -470,7 +431,9 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                             </ToggleRow>
                         </FormGroup>
                     </FormSection>
-                    <SaveButton type="submit">{t("SavePlant")}</SaveButton>
+                    <SaveButton type="submit" disabled={loading}>
+                        {loading ? <Spinner /> : t("SavePlant")}
+                    </SaveButton>
                 </form>
             </AddContainer>
         </PageLayout>
