@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
+import { Camera, ScanText, Droplets } from 'lucide-react';
 import { Select } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import PageLayout from '../../components/PageLayout';
 import {
     AddContainer,
-    BackButton,
     FormSection,
     PhotoSection,
     PhotoPlaceholder,
