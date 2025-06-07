@@ -143,4 +143,6 @@ VITE_OPENAI_API_KEY=your_openai_key
 
 The `useFirestore` hook in `src/hooks/useFirestore.ts` provides simple `get`, `post` and `put` helpers for interacting with Cloud Firestore collections.
 
+Uploaded plant photos are saved in Firebase Storage using the `useStorage` hook in `src/hooks/useStorage.ts` so images remain available when you revisit your plants.
+
 New users can register via the **Create Account** page, accessible from the login screen. Registration uses Firebase Authentication with email and password.
