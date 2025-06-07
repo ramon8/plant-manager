@@ -103,6 +103,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const [scanning, setScanning] = useState(false);
     const photoInputRef = useRef<HTMLInputElement | null>(null);
     const scanInputRef = useRef<HTMLInputElement | null>(null);
+    const photoGalleryInputRef = useRef<HTMLInputElement | null>(null);
+    const scanGalleryInputRef = useRef<HTMLInputElement | null>(null);
 
     const editing = Boolean(id);
 
@@ -139,6 +141,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         photoInputRef.current?.click();
     };
 
+    const handleUploadPhoto = () => {
+        photoGalleryInputRef.current?.click();
+    };
+
     const handlePhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -154,6 +160,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
 
     const handleScanPlant = () => {
         scanInputRef.current?.click();
+    };
+
+    const handleScanFromGallery = () => {
+        scanGalleryInputRef.current?.click();
     };
 
     async function identifyPlant(file: File) {
@@ -332,9 +342,17 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 <Camera size={18} />
                                 {t('TakePhoto')}
                             </PhotoButton>
+                            <PhotoButton type="button" onClick={handleUploadPhoto}>
+                                <Camera size={18} />
+                                {t('UploadPhoto')}
+                            </PhotoButton>
                             <PhotoButton type="button" onClick={handleScanPlant} disabled={scanning}>
                                 <ScanText size={18} />
                                 {scanning ? <Spinner /> : t('ScanPlant')}
+                            </PhotoButton>
+                            <PhotoButton type="button" onClick={handleScanFromGallery} disabled={scanning}>
+                                <ScanText size={18} />
+                                {scanning ? <Spinner /> : t('ScanFromGallery')}
                             </PhotoButton>
                             <input
                                 ref={photoInputRef}
@@ -345,10 +363,24 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                                 onChange={handlePhotoSelected}
                             />
                             <input
+                                ref={photoGalleryInputRef}
+                                type="file"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handlePhotoSelected}
+                            />
+                            <input
                                 ref={scanInputRef}
                                 type="file"
                                 accept="image/*"
                                 capture="environment"
+                                style={{ display: 'none' }}
+                                onChange={handleScanSelected}
+                            />
+                            <input
+                                ref={scanGalleryInputRef}
+                                type="file"
+                                accept="image/*"
                                 style={{ display: 'none' }}
                                 onChange={handleScanSelected}
                             />
