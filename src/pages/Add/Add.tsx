@@ -4,11 +4,10 @@ import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
 import { Select } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import PageLayout from '../../components/PageLayout';
 import {
     AddContainer,
-    HeaderContainer,
     BackButton,
-    PageTitle,
     FormSection,
     PhotoSection,
     PhotoPlaceholder,
@@ -187,50 +186,46 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             }
             navigate(`/plants/${newPlant.id}`);
         }
-    };
-    return (
-        <AddContainer className={className}>
-            <HeaderContainer>
-                <BackButton onClick={handleGoBack}>
-                    <ChevronLeft size={20} />
-                    {t('Back')}
-                </BackButton>
-                
-                <PageTitle>{editing ? t('EditPlant') : t('AddNewPlant')}</PageTitle>
-            </HeaderContainer>
+    }; return (
+        <PageLayout
+            title={editing ? t('EditPlant') : t('AddNewPlant')}
+            subtitle={editing ? t('UpdatePlantInfo') : t('AddPlantToCollection')}
+            className={className}
+            onBack={handleGoBack}
+        >
+            <AddContainer>
+                <form onSubmit={handleSubmit}>
+                    <PhotoSection>
+                        <PhotoPlaceholder>
+                            {photoUrl ? (
+                                <img
+                                    src={photoUrl}
+                                    alt="Plant"
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        borderRadius: '50%',
+                                        objectFit: 'cover',
+                                    }}
+                                />
+                            ) : (
+                                <Camera />
+                            )}
+                        </PhotoPlaceholder>
 
-            <form onSubmit={handleSubmit}>
-                <PhotoSection>
-                    <PhotoPlaceholder>
-                        {photoUrl ? (
-                            <img
-                                src={photoUrl}
-                                alt="Plant"
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    borderRadius: '50%',
-                                    objectFit: 'cover',
-                                }}
-                            />
-                        ) : (
-                            <Camera />
-                        )}
-                    </PhotoPlaceholder>
+                        <PhotoActions>
+                            <PhotoButton type="button" onClick={handleTakePhoto}>
+                                <Camera size={18} />
+                                {t('TakePhoto')}
+                            </PhotoButton>
+                            <PhotoButton type="button" onClick={handleScanPlant}>
+                                <ScanText size={18} />
+                                {t('ScanPlant')}
+                            </PhotoButton>
+                        </PhotoActions>
+                    </PhotoSection>
 
-                    <PhotoActions>
-                        <PhotoButton type="button" onClick={handleTakePhoto}>
-                            <Camera size={18} />
-                            {t('TakePhoto')}
-                        </PhotoButton>
-                        <PhotoButton type="button" onClick={handleScanPlant}>
-                            <ScanText size={18} />
-                            {t('ScanPlant')}
-                        </PhotoButton>
-                    </PhotoActions>
-                </PhotoSection>
-
-                <FormSection>                    <FormGroup>
+                    <FormSection>                    <FormGroup>
                         <Label htmlFor="species">{t("PlantSpecies")}</Label>                        <StyledSelect
                             placeholder={t("SelectSpecies")}
                             value={plantSpecies}
@@ -249,18 +244,18 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                         />
                     </FormGroup>
 
-                    <FormGroup>
-                        <Label htmlFor="nickname">{t("PlantNickname")}</Label>
-                        <Input
-                            id="nickname"
-                            type="text"
-                            placeholder={t("GivePlantName")}
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
-                        />
-                    </FormGroup>
+                        <FormGroup>
+                            <Label htmlFor="nickname">{t("PlantNickname")}</Label>
+                            <Input
+                                id="nickname"
+                                type="text"
+                                placeholder={t("GivePlantName")}
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                            />
+                        </FormGroup>
 
-                    <FormRow>                        <FormGroup>
+                        <FormRow>                        <FormGroup>
                             <Label htmlFor="potSize">{t("PotSize")}</Label>                            <StyledSelect
                                 placeholder={t("SelectSize")}
                                 value={potSize}
@@ -269,59 +264,58 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
                             />
                         </FormGroup>
 
+                            <FormGroup>
+                                <Label htmlFor="location">{t("Location")}</Label>
+                                <StyledSelect
+                                    placeholder={t("SelectRoom")}
+                                    value={location}
+                                    onChange={(value) => setLocation(value as string)}
+                                    options={locations}
+                                />
+                            </FormGroup>
+                        </FormRow>
+
                         <FormGroup>
-                            <Label htmlFor="location">{t("Location")}</Label>
-                            <StyledSelect
-                                placeholder={t("SelectRoom")}
-                                value={location}
-                                onChange={(value) => setLocation(value as string)}
-                                options={locations}
+                            <Label htmlFor="careNotes">{t("CareNotes")}</Label>
+                            <Textarea
+                                id="careNotes"
+                                placeholder={t("AddCareInstructions")}
+                                value={careNotes}
+                                onChange={(e) => setCareNotes(e.target.value)}
                             />
                         </FormGroup>
-                    </FormRow>
+                    </FormSection>
 
-                    <FormGroup>
-                        <Label htmlFor="careNotes">{t("CareNotes")}</Label>
-                        <Textarea
-                            id="careNotes"
-                            placeholder={t("AddCareInstructions")}
-                            value={careNotes}
-                            onChange={(e) => setCareNotes(e.target.value)}
-                        />
-                    </FormGroup>
-                </FormSection>
+                    <FormSection>
+                        <WateringScheduleIcon>
+                            <Droplets />
+                        </WateringScheduleIcon>                    <FormGroup>
+                            <Label htmlFor="wateringFrequency">{t("WateringFrequency")}</Label>
+                            <StyledSelect
+                                placeholder={t("SelectFrequency")}
+                                value={wateringFrequency}
+                                onChange={(value) => setWateringFrequency(value as string)}
+                                options={wateringFrequencies}
+                            />
+                        </FormGroup>
 
-                <FormSection>
-                    <WateringScheduleIcon>
-                        <Droplets />
-                    </WateringScheduleIcon>                    <FormGroup>
-                        <Label htmlFor="wateringFrequency">{t("WateringFrequency")}</Label>
-                        <StyledSelect
-                            placeholder={t("SelectFrequency")}
-                            value={wateringFrequency}
-                            onChange={(value) => setWateringFrequency(value as string)}
-                            options={wateringFrequencies}
-                        />
-                    </FormGroup>
-
-                    <FormGroup>
-                        <ToggleRow>
-                            <Label htmlFor="notifications">{t("PushNotifications")}</Label>
-                            <Toggle>
-                                <input
-                                    type="checkbox"
-                                    checked={enableNotifications}
-                                    onChange={(e) => setEnableNotifications(e.target.checked)}
-                                />
-                                <ToggleSlider checked={enableNotifications} />
-                            </Toggle>
-                        </ToggleRow>
-                    </FormGroup>
-                </FormSection>
-
-                <SaveButton type="submit">{t("SavePlant")}</SaveButton>
-            </form>
-        </AddContainer>
+                        <FormGroup>
+                            <ToggleRow>
+                                <Label htmlFor="notifications">{t("PushNotifications")}</Label>
+                                <Toggle>
+                                    <input
+                                        type="checkbox"
+                                        checked={enableNotifications}
+                                        onChange={(e) => setEnableNotifications(e.target.checked)}
+                                    />
+                                    <ToggleSlider checked={enableNotifications} />
+                                </Toggle>
+                            </ToggleRow>
+                        </FormGroup>
+                    </FormSection>                <SaveButton type="submit">{t("SavePlant")}</SaveButton>
+                </form>
+            </AddContainer>
+        </PageLayout>
     );
 };
 

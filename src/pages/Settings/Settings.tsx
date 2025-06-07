@@ -1,12 +1,19 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import PageLayout from '../../components/PageLayout';
 import {
     SettingsContainer,
-    SettingsHeader,
     SettingsSections,
     SettingsSection,
+    Select,
+    SettingContent,
+    SettingControl,
+    SettingDescription,
+    SettingItem,
+    SettingLabel,
+    SettingRow,
 } from './Settings.styles';
-import type { SettingsProps } from './Settings.types';
+import type { SelectSettingProps, SettingsProps } from './Settings.types';
 import { useTheme } from '../../theme/ThemeContext';
 import { useAppData } from '../../context';
 
@@ -34,6 +41,7 @@ const ToggleSetting: React.FC<ToggleSettingProps> = ({
         </SettingRow>
     </SettingItem>
 );
+*/
 
 const SelectSetting: React.FC<SelectSettingProps> = ({
     label,
@@ -62,7 +70,6 @@ const SelectSetting: React.FC<SelectSettingProps> = ({
         </SettingRow>
     </SettingItem>
 );
-*/
 
 const Settings: React.FC<SettingsProps> = ({ className }) => {
     const { t, i18n } = useTranslation();
@@ -88,17 +95,16 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
             console.log('Reset data confirmed');
         }
     };
-    */
+    */    return (
+        <PageLayout
+            title={t('SettingsTitle')}
+            subtitle={t('SettingsSubtitle')}
+            className={className}
+        >
+            <SettingsContainer>
 
-    return (
-        <SettingsContainer className={className}>
-            <SettingsHeader>
-                <h1>{t('SettingsTitle')}</h1>
-                <p>{t('SettingsSubtitle')}</p>
-            </SettingsHeader>
-
-            <SettingsSections>
-                {/* <SettingsSection>
+                <SettingsSections>
+                    {/* <SettingsSection>
                     <h3>🔔 {t('Notifications')}</h3>
                     <ToggleSetting
                         label={t('EnableWateringReminders')}
@@ -120,38 +126,38 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                     />
                 </SettingsSection> */}
 
-                <SettingsSection>
-                    <h3>🎨 {t('DisplayPrefs')}</h3>
-                    <SelectSetting
-                        label={t('Theme')}
-                        description={t('ChooseColorScheme')}
-                        value={settings.display.theme}
-                        options={[
-                            { value: 'light', label: t('Light') },
-                            { value: 'dark', label: t('Dark') },
-                            { value: 'auto', label: t('Auto') },
-                        ]}
-                        onChange={(value) => {
-                            updateDisplaySetting('theme', value);
-                            if (value === 'light' || value === 'dark') {
-                                setTheme(value);
-                            }
-                        }}
-                    />
-                    <SelectSetting
-                        label={t('Language')}
-                        description={t('SelectLanguage')}
-                        value={settings.display.language}
-                        options={[
-                            { value: 'en', label: t('English') },
-                            { value: 'es', label: t('Spanish') },
-                        ]}
-                        onChange={(value) => {
-                            i18n.changeLanguage(value);
-                            updateDisplaySetting('language', value);
-                        }}
-                    />
-                    {/* <SelectSetting
+                    <SettingsSection>
+                        <h3>🎨 {t('DisplayPrefs')}</h3>
+                        <SelectSetting
+                            label={t('Theme')}
+                            description={t('ChooseColorScheme')}
+                            value={settings.display.theme}
+                            options={[
+                                { value: 'light', label: t('Light') },
+                                { value: 'dark', label: t('Dark') },
+                                { value: 'auto', label: t('Auto') },
+                            ]}
+                            onChange={(value) => {
+                                updateDisplaySetting('theme', value);
+                                if (value === 'light' || value === 'dark') {
+                                    setTheme(value);
+                                }
+                            }}
+                        />
+                        <SelectSetting
+                            label={t('Language')}
+                            description={t('SelectLanguage')}
+                            value={settings.display.language}
+                            options={[
+                                { value: 'en', label: t('English') },
+                                { value: 'es', label: t('Spanish') },
+                            ]}
+                            onChange={(value) => {
+                                i18n.changeLanguage(value);
+                                updateDisplaySetting('language', value);
+                            }}
+                        />
+                        {/* <SelectSetting
                         label={t('DateFormat')}
                         description={t('ChooseDateDisplay')}
                         value={settings.display.dateFormat}
@@ -162,9 +168,9 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                         ]}
                         onChange={(value) => updateDisplaySetting('dateFormat', value)}
                     /> */}
-                </SettingsSection>
+                    </SettingsSection>
 
-                {/* <SettingsSection>
+                    {/* <SettingsSection>
                     <h3>🌱 {t('CareSettings')}</h3>
                     <SelectSetting
                         label={t('DefaultWateringFrequency')}
@@ -204,7 +210,7 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                     />
                 </SettingsSection> */}
 
-                {/* <SettingsSection>
+                    {/* <SettingsSection>
                     <h3>💾 {t('DataManagement')}</h3>
                     <SettingItem>
                         <p style={{ marginBottom: '1rem', color: '#666' }}>
@@ -221,10 +227,10 @@ const Settings: React.FC<SettingsProps> = ({ className }) => {
                                 🗑️ {t('ResetAllData')}
                             </ActionButton>
                         </DataActionsContainer>
-                    </SettingItem>
-                </SettingsSection> */}
-            </SettingsSections>
-        </SettingsContainer>
+                    </SettingItem>                </SettingsSection> */}
+                </SettingsSections>
+            </SettingsContainer>
+        </PageLayout>
     );
 };
 
