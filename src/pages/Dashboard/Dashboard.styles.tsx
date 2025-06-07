@@ -112,6 +112,13 @@ export const PlantAvatar = styled.div`
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text.secondary};
   flex-shrink: 0;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
 export const PlantInfo = styled.div`

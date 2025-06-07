@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Camera, ScanText, ChevronLeft, Droplets } from 'lucide-react';
+import { Camera, ScanText, Droplets } from 'lucide-react';
 import { Select } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import PageLayout from '../../components/PageLayout';
 import {
     AddContainer,
-    BackButton,
     FormSection,
     PhotoSection,
     PhotoPlaceholder,
@@ -26,7 +25,8 @@ import {
 } from './Add.styles';
 import type { AddPlantProps, WateringFrequency, PotSize, Location } from './Add.types';
 import type { Plant } from '../../types';
-import { useAppData } from '../../context';
+import { useAppData, useAuth } from '../../context';
+import { useStorage } from '../../hooks/useStorage';
 
 import OpenAI from "openai";
 
@@ -89,6 +89,8 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
     const navigate = useNavigate();
     const { id } = useParams<{ id?: string }>();
     const { plants, addPlant, updatePlant } = useAppData();
+    const { user } = useAuth();
+    const { upload } = useStorage();
     // Form state
     const [plantSpecies, setPlantSpecies] = useState('');
     const [nickname, setNickname] = useState('');
@@ -136,11 +138,18 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         photoInputRef.current?.click();
     };
 
-    const handlePhotoSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handlePhotoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file) return;
-        const url = URL.createObjectURL(file);
-        setPhotoUrl(url);
+        if (!file || !user) return;
+        const preview = URL.createObjectURL(file);
+        setPhotoUrl(preview);
+        try {
+            const path = `plants/${user.uid}/${Date.now()}_${file.name}`;
+            const url = await upload(path, file);
+            setPhotoUrl(url);
+        } catch (err) {
+            console.error('Image upload failed', err);
+        }
     };
 
     const handleScanPlant = () => {
@@ -258,11 +267,18 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
         reader.readAsDataURL(file);
     }
 
-    const handleScanSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleScanSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file) return;
-        const url = URL.createObjectURL(file);
-        setPhotoUrl(url);
+        if (!file || !user) return;
+        const preview = URL.createObjectURL(file);
+        setPhotoUrl(preview);
+        try {
+            const path = `plants/${user.uid}/${Date.now()}_${file.name}`;
+            const url = await upload(path, file);
+            setPhotoUrl(url);
+        } catch (err) {
+            console.error('Image upload failed', err);
+        }
         identifyPlant(file);
     };
 

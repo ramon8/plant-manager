@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Droplet, Clock, Book, BarChart2, Settings, Trash2 } from 'lucide-react';
+import { Droplet, Clock, Book, BarChart2, Settings, Trash2 } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import {
     PlantDetailContainer,
-    BackButton,
     ProfileCard,
     PlantInfo,
     PlantImage,
@@ -151,7 +150,9 @@ const PlantDetail: React.FC<PlantDetailProps> = ({ className }) => {
                 <ProfileCard>
                     <PlantInfo>
                         <PlantImage>
-                            {/* Placeholder image - in a real app, use plant.image */}
+                            {plant.image && (
+                                <img src={plant.image} alt={plant.name} />
+                            )}
                         </PlantImage>
                         <PlantDetails>
                             <PlantName>{plant.name}</PlantName>
