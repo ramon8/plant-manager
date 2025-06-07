@@ -23,6 +23,8 @@ import {
     ToggleSlider,
     SaveButton,
     ScanOverlay,
+    ScanContainer,
+    ScanMessage,
     SourceOverlay,
     SourceModal,
     SourceActions,
@@ -487,7 +489,10 @@ const AddPlant: React.FC<AddPlantProps> = ({ className, onSave, onCancel }) => {
             </AddContainer>
             {scanning && (
                 <ScanOverlay>
-                    <Spinner style={{ width: '48px', height: '48px' }} />
+                    <ScanContainer>
+                        <Spinner style={{ width: '48px', height: '48px' }} />
+                        <ScanMessage>{t('ScanningImage')}</ScanMessage>
+                    </ScanContainer>
                 </ScanOverlay>
             )}
             {sourcePicker && (
